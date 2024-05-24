@@ -2,8 +2,7 @@
   channel = "stable-23.11";
   packages = [
     pkgs.bun
-    pkgs.nodejs_latest
-    pkgs.vercel-pkg
+    pkgs.nodejs_20
   ];
   idx.extensions = [
     "bradlc.vscode-tailwindcss"
