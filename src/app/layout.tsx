@@ -4,7 +4,9 @@ import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Toaster } from 'react-hot-toast';
 import { cn } from '@/lib/utils';
+import Navbar from '@/components/Navbar';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -22,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body
         className={cn(
           'mx-auto bg-neutral-100 dark:bg-neutral-900',
@@ -35,7 +37,9 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
+          <Navbar />
           {children}
+          <Toaster position='top-right' />
           <ThemeToggle />
         </ThemeProvider>
       </body>
