@@ -8,6 +8,7 @@ const signUpSchema = z.object({
   username: z.string().min(3, { message: 'Must be 3 or more characters long' }),
   email: z.string().email('Please enter valid message').min(5),
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
+  password2: z.string(),
 });
 
 export async function signUp(prevState: any, formData: FormData) {
@@ -16,6 +17,7 @@ export async function signUp(prevState: any, formData: FormData) {
     email: formData.get('email'),
     username: formData.get('username'),
     password: formData.get('password'),
+    password2: formData.get('password2'),
   });
 
   // Return early if the form data is invalid
@@ -24,6 +26,21 @@ export async function signUp(prevState: any, formData: FormData) {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to signUp.',
+    };
+  }
+
+  // check for password match
+  if (validatedFields.data.password !== validatedFields.data.password2) {
+    return {
+      type: 'error',
+      errors: {
+        name: undefined,
+        username: undefined,
+        email: undefined,
+        password: undefined,
+        password2: 'Passwords do not match',
+      },
+      message: 'Passwords do not match. Failed to signUp.',
     };
   }
 

@@ -1,5 +1,6 @@
 'use client';
 // import { useActionState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from '@/actions/authAction';
 import Link from 'next/link';
@@ -7,6 +8,11 @@ import { useFormState } from 'react-dom';
 import { SubmitButton } from '@/components/SubmitButton';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/icons';
+import { Eye, EyeOff } from 'lucide-react';
 
 const initialState = {
   type: '',
@@ -14,9 +20,9 @@ const initialState = {
   errors: null,
 };
 
-export default function SignInForm() {
+export default function SignIn() {
   // const [state, submitAction, isPending] = useActionState(signUp, initialState);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [state, submitAction] = useFormState(signIn, initialState);
 
   const router = useRouter();
@@ -30,56 +36,85 @@ export default function SignInForm() {
   }, [state.type]);
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-500 '>
-      <div className='w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-xl'>
+    <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
+      <div className='mx-auto flex flex-col gap-2 rounded-lg p-8 shadow-lg shadow-black dark:shadow-white'>
         <div className='text-center'>
-          <h1 className='mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl'>
-            Sign In
+          <h1 className='text-4xl font-extrabold tracking-tight lg:text-5xl'>
+            Welcome back
           </h1>
         </div>
         <form action={submitAction} className='space-y-6'>
           {state.errors && <p className='text-red-500'>{state.message}</p>}
-          <div>
-            <label htmlFor='username' className='sr-only'>
-              Username
-            </label>
-            <input
-              type='text'
-              name='username'
+          <div className='grid gap-2'>
+            <Label htmlFor='username'>Username</Label>
+            <Input
               id='username'
-              className='w-full rounded-md border border-gray-300 px-4 py-2 text-sm text-black shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white'
+              name='username'
               placeholder='Username'
+              required
+              type='text'
             />
-            {/* error  for username*/}
             {state.errors?.username && (
-              <p className='text-red-500'>{state.errors.username}</p>
+              <p className='text-sm text-red-500'>{state.errors.username}</p>
             )}
           </div>
-          <div>
-            <label htmlFor='password' className='sr-only'>
-              Password
-            </label>
-            <input
-              type='password'
-              name='password'
-              id='password'
-              className='w-full rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500'
-              placeholder='Password'
-            />
-            {/* error  for password*/}
+          <div className='grid gap-2'>
+            <div className='flex items-center'>
+              <Label htmlFor='password'>Password</Label>
+              <Link
+                href='/forgot-password'
+                className='ml-auto inline-block text-sm underline'
+              >
+                Forgot your password?
+              </Link>
+            </div>
+            <div className='relative'>
+              <Input
+                id='password'
+                name='password'
+                placeholder='••••••••'
+                required
+                className='form-input block w-full px-3 py-2 placeholder-gray-500 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
+                type={showPassword ? 'text' : 'password'}
+              />
+              <div
+                className='absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3'
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className='h-5 w-5 text-gray-500' />
+                ) : (
+                  <Eye className='h-5 w-5 text-gray-500' />
+                )}
+              </div>
+            </div>
             {state.errors?.password && (
               <p className='text-red-500'>{state.errors.password}</p>
             )}
           </div>
           <SubmitButton name='Sign In' />
         </form>
-        <div className='mt-4 text-center'>
-          <p>
-            Do not have an account?{' '}
-            <Link href='/sign-up' className='text-blue-600 hover:text-blue-800'>
-              Sign Up
+        <div className='px-2 text-center'>Or continue with</div>
+        <div className='flex items-center justify-center space-x-4'>
+          <Button className='w-full' variant='outline'>
+            <Icons.gitHub className='mr-2 h-4 w-4' />
+            GitHub
+          </Button>
+          <Button className='w-full' variant='outline'>
+            <Icons.google className='mr-2 h-4 w-4' />
+            Google
+          </Button>
+        </div>
+        <div className='mt-6 flex items-center justify-between'>
+          <div className='text-sm text-gray-500 dark:text-gray-400'>
+            Don&rsquo;t have an account ?{' '}
+            <Link
+              className='font-medium text-blue-500 hover:underline'
+              href='/sign-up'
+            >
+              Sign up
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>
