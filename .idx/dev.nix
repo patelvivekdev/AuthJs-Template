@@ -8,5 +8,6 @@
     "bradlc.vscode-tailwindcss"
     "esbenp.prettier-vscode"
     "streetsidesoftware.code-spell-checker"
+    "WakaTime.vscode-wakatime"
   ];
 }

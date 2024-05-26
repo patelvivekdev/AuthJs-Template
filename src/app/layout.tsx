@@ -1,16 +1,23 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Inter as FontSans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Toaster } from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
+import { Inter } from 'next/font/google';
+import { Rubik } from 'next/font/google';
 
-const fontSans = FontSans({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
+  display: 'swap',
+  variable: '--font-inter',
+});
+const rubik = Rubik({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-rubik',
 });
 
 export const metadata: Metadata = {
@@ -28,7 +35,8 @@ export default function RootLayout({
       <body
         className={cn(
           'mx-auto bg-neutral-100 dark:bg-neutral-900',
-          fontSans.variable,
+          inter.variable,
+          rubik.variable,
         )}
       >
         <ThemeProvider
