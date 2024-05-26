@@ -12,14 +12,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({ allowDangerousEmailAccountLinking: true }),
     Github({ allowDangerousEmailAccountLinking: true }),
     Credentials({
-      name: 'Credentials',
+      name: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         try {
-          console.log(credentials);
           if (!credentials.username || !credentials.password) {
             return null;
           }
@@ -54,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       );
 
       if (isProtected && !isLoggedIn) {
-        const redirectUrl = new URL('/login', nextUrl.origin);
+        const redirectUrl = new URL('/sign-in', nextUrl.origin);
         redirectUrl.searchParams.append('callbackUrl', nextUrl.href);
         return Response.redirect(redirectUrl);
       }
@@ -66,20 +65,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           ...token,
           id: u.id,
-          randomKey: u.randomKey,
         };
       }
       return token;
     },
-    session(params) {
-      return {
-        ...params.session,
-        user: {
-          ...params.session.user,
-          id: params.token.id as string,
-          randomKey: params.token.randomKey,
-        },
-      };
+    session: async ({ session, token }) => {
+      session.user.id = token.sub!;
+      return session;
     },
   },
   session: { strategy: 'jwt' },

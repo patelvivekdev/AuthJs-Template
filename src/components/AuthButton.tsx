@@ -68,7 +68,9 @@ export function SignOut() {
       }}
       className='w-full'
     >
-      <button className='w-full'>Sign Out</button>
+      <Button size='sm' variant='destructive'>
+        Logout
+      </Button>
     </form>
   );
 }

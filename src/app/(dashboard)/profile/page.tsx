@@ -9,14 +9,21 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) {
+    redirect('sign-in');
+  }
   return (
     <div className='container mx-auto px-8 py-12'>
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
         <Card>
           <CardHeader>
-            <CardTitle>Your Profile</CardTitle>
+            <CardTitle>{user?.name} Profile</CardTitle>
             <CardDescription>
               Update your personal information and preferences.
             </CardDescription>
@@ -25,21 +32,27 @@ export default function Dashboard() {
             <form className='space-y-4'>
               <div>
                 <Label htmlFor='name'>Name</Label>
-                <Input defaultValue='John Doe' id='name' type='text' />
+                <Input
+                  defaultValue={user?.name ? user?.name : ''}
+                  id='name'
+                  type='text'
+                  disabled
+                />
               </div>
               <div>
                 <Label htmlFor='email'>Email</Label>
                 <Input
-                  defaultValue='john@example.com'
+                  defaultValue={user?.email ? user?.email : ''}
                   id='email'
                   type='email'
+                  disabled
                 />
               </div>
-              <div>
+              {/* <div>
                 <Label htmlFor='password'>Password</Label>
                 <Input id='password' placeholder='••••••••' type='password' />
-              </div>
-              <Button className='w-full' type='submit'>
+              </div> */}
+              <Button className='w-full' type='submit' disabled>
                 Update Profile
               </Button>
             </form>

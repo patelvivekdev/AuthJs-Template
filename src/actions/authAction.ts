@@ -1,6 +1,7 @@
 'use server';
-import { createUser, loginUser } from '@/db/query/User';
+import { createUser } from '@/db/query/User';
 import { z } from 'zod';
+import { signIn as signInUser } from '@/auth';
 
 // =============================== signUp ===============================
 const signUpSchema = z.object({
@@ -97,32 +98,35 @@ export async function signIn(prevState: any, formData: FormData) {
     };
   }
 
-  try {
-    // Call the loginUser function
-    let user = await loginUser(
-      validatedFields.data.username,
-      validatedFields.data.password,
-    );
+  // Call the loginUser function
+  let user = await signInUser('credentials', {
+    username: validatedFields.data.username,
+    password: validatedFields.data.password,
+    redirect: true,
+    redirectTo: '/profile',
+  });
 
-    if (!user) {
-      return {
-        type: 'error',
-        errors: null,
-        message: 'Invalid username or password.',
-      };
-    }
-
-    return {
-      type: 'success',
-      errors: null,
-      message: 'Successfully signed in.',
-    };
-  } catch (error: any) {
-    console.error('Failed to signIn', error);
+  if (!user) {
     return {
       type: 'error',
       errors: null,
-      message: error.message || 'Failed to signIn.',
+      message: 'Invalid username or password.',
     };
   }
+
+  return {
+    type: 'success',
+    errors: null,
+    message: 'Successfully signed in.',
+  };
+
+  // try {
+  // } catch (error: any) {
+  //   console.error('Failed to signIn', error);
+  //   return {
+  //     type: 'error',
+  //     errors: null,
+  //     message: error.message || 'Failed to signIn.',
+  //   };
+  // }
 }
