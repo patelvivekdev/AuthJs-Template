@@ -35,7 +35,7 @@ export default function SignUp() {
     } else if (state.type === 'error') {
       toast.error(state.message);
     }
-  }, [state.type]);
+  }, [state]);
 
   return (
     <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
