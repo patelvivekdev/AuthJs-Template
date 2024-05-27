@@ -28,6 +28,8 @@ export function GithubSignIn() {
       action={async () => {
         'use server';
         await signIn('github', {
+          redirectTo: '/profile',
+          redirect: true,
           callbackUrl: '/',
         });
       }}

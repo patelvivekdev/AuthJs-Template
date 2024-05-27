@@ -24,9 +24,28 @@ export const loginUser = async (username: string, password: string) => {
   return user[0];
 };
 
-export const getUserById = async (id: number) => {
-  const user = await db.select().from(users).where(eq(users.id, id.toString()));
-  return user[0];
+export const getUserById = async (id: string) => {
+  const result = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.id, id),
+    columns: {
+      // Include only fields you want from users table, excluding password
+      id: true,
+      name: true,
+      email: true,
+      username: true,
+      emailVerified: true,
+      image: true,
+    },
+    with: {
+      accounts: {
+        columns: {
+          // Include only the provider field from accounts table
+          provider: true,
+        },
+      },
+    },
+  });
+  return result;
 };
 
 export const createUser = async (

@@ -11,13 +11,18 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { getUserById } from '@/db/query/User';
 
 export default async function Dashboard() {
   const session = await auth();
   const user = session?.user;
   if (!user) {
-    redirect('sign-in');
+    redirect('/sign-in');
   }
+
+  let userData = await getUserById(user?.id!);
+
+  let accounts = userData?.accounts.map((account) => account.provider);
   return (
     <div className='container mx-auto px-8 py-12'>
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
@@ -73,13 +78,21 @@ export default async function Dashboard() {
                   <div>
                     <h3 className='text-lg font-medium'>Google</h3>
                     <p className='text-gray-500 dark:text-gray-400'>
-                      Not connected
+                      {accounts?.includes('google')
+                        ? 'Connected'
+                        : 'Not Connected'}
                     </p>
                   </div>
                 </div>
-                <Button size='sm' variant='outline'>
-                  Connect
-                </Button>
+                {accounts?.includes('google') ? (
+                  <Button size='sm' variant='destructive'>
+                    Disconnect
+                  </Button>
+                ) : (
+                  <Button size='sm' variant='outline'>
+                    Connect
+                  </Button>
+                )}
               </div>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>
@@ -87,13 +100,21 @@ export default async function Dashboard() {
                   <div>
                     <h3 className='text-lg font-medium'>GitHub</h3>
                     <p className='text-gray-500 dark:text-gray-400'>
-                      Not connected
+                      {accounts?.includes('github')
+                        ? 'Connected'
+                        : 'Not Connected'}
                     </p>
                   </div>
                 </div>
-                <Button size='sm' variant='outline'>
-                  Connect
-                </Button>
+                {accounts?.includes('github') ? (
+                  <Button size='sm' variant='destructive'>
+                    Disconnect
+                  </Button>
+                ) : (
+                  <Button size='sm' variant='outline'>
+                    Connect
+                  </Button>
+                )}
               </div>
               {/* <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>

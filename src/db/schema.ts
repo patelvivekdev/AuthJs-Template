@@ -4,6 +4,7 @@ import {
   text,
   primaryKey,
 } from 'drizzle-orm/sqlite-core';
+import { relations } from 'drizzle-orm';
 import type { AdapterAccountType } from 'next-auth/adapters';
 
 export const users = sqliteTable('user', {
@@ -41,6 +42,14 @@ export const accounts = sqliteTable(
     }),
   }),
 );
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
 
 export const sessions = sqliteTable('session', {
   sessionToken: text('sessionToken').primaryKey(),
