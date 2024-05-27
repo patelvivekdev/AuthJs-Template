@@ -1,6 +1,5 @@
 'use client';
 // import { useActionState } from 'react';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signUp } from '@/actions/authAction';
 import { useFormState } from 'react-dom';
@@ -9,7 +8,6 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Eye, EyeOff } from 'lucide-react';
 
 const initialState = {
   type: '',
@@ -20,15 +18,13 @@ const initialState = {
 export default function SignUp() {
   // const [state, submitAction, isPending] = useActionState(signUp, initialState);
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [state, submitAction] = useFormState(signUp, initialState);
 
   const router = useRouter();
   useEffect(() => {
     if (state.type === 'success') {
       toast.success(state.message);
-      router.push('/');
+      router.push('/sign-up/next');
     } else if (state.type === 'error') {
       toast.error(state.message);
     }
@@ -42,32 +38,6 @@ export default function SignUp() {
         </p>
       )}
       <div className='grid gap-2'>
-        <Label htmlFor='name'>Name</Label>
-        <Input
-          id='name'
-          name='name'
-          placeholder='John Doe'
-          required
-          type='text'
-        />
-        {state.errors?.name && (
-          <p className='text-sm text-red-500'>{state.errors.name}</p>
-        )}
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='username'>Username</Label>
-        <Input
-          id='username'
-          name='username'
-          placeholder='Username'
-          required
-          type='text'
-        />
-        {state.errors?.username && (
-          <p className='text-sm text-red-500'>{state.errors.username}</p>
-        )}
-      </div>
-      <div className='grid gap-2'>
         <Label htmlFor='email'>Email</Label>
         <Input
           id='email'
@@ -80,58 +50,6 @@ export default function SignUp() {
       {state.errors?.email && (
         <p className='text-red-500'>{state.errors.email}</p>
       )}
-      <div className='grid gap-2'>
-        <Label htmlFor='password'>Password</Label>
-        <div className='relative'>
-          <Input
-            id='password'
-            name='password'
-            placeholder='••••••••'
-            required
-            className='form-input block w-full px-3 py-2 placeholder-gray-500 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
-            type={showPassword ? 'text' : 'password'}
-          />
-          <div
-            className='absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3'
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <EyeOff className='h-5 w-5 text-gray-500' />
-            ) : (
-              <Eye className='h-5 w-5 text-gray-500' />
-            )}
-          </div>
-        </div>
-        {state.errors?.password && (
-          <p className='text-red-500'>{state.errors.password}</p>
-        )}
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='password2'>Password Confirmation</Label>
-        <div className='relative'>
-          <Input
-            id='password2'
-            name='password2'
-            placeholder='••••••••'
-            required
-            className='form-input block w-full px-3 py-2 placeholder-gray-500 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
-            type={showConfirmPassword ? 'text' : 'password'}
-          />
-          <div
-            className='absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3'
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            {showConfirmPassword ? (
-              <EyeOff className='h-5 w-5 text-gray-500' />
-            ) : (
-              <Eye className='h-5 w-5 text-gray-500' />
-            )}
-          </div>
-        </div>
-        {state.errors?.password2 && (
-          <p className='text-red-500'>{state.errors.password2}</p>
-        )}
-      </div>
       <SubmitButton name='Sign Up' />
     </form>
   );

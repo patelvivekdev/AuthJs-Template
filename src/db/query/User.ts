@@ -1,7 +1,8 @@
 import { db } from '..';
-import { users, accounts } from '../schema';
+import { users, accounts, verificationTokens } from '../schema';
 import { eq, or } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { sendVerificationEmail } from '@/lib/resend';
 
 export const loginUser = async (username: string, password: string) => {
   // check if user is sign up with oauth
@@ -83,4 +84,18 @@ export const createUser = async (
     })
     .returning();
   return user;
+};
+
+export const createVerificationToken = async (email: string) => {
+  let token = crypto.randomUUID();
+  let expires = new Date();
+  expires.setMinutes(expires.getMinutes() + 5);
+
+  await db
+    .insert(verificationTokens)
+    .values({ identifier: email, token, expires })
+    .returning();
+
+  let emailData = await sendVerificationEmail(email, token);
+  return emailData;
 };
