@@ -15,7 +15,7 @@ const initialState = {
   errors: null,
 };
 
-export default function SignUp() {
+export default function SignUpForm() {
   // const [state, submitAction, isPending] = useActionState(signUp, initialState);
 
   const [state, submitAction] = useFormState(signUp, initialState);

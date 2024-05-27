@@ -17,12 +17,15 @@ const initialState = {
   errors: null,
 };
 
-export default function OnBoardingForm() {
+export default function OnBoardingForm({ email }: { email: string }) {
   // const [state, submitAction, isPending] = useActionState(onBoarding, initialState);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [state, submitAction] = useFormState(onBoarding, initialState);
+
+  const onBoardingWithEmail = onBoarding.bind(null, email as string);
+
+  const [state, submitAction] = useFormState(onBoardingWithEmail, initialState);
 
   const router = useRouter();
   useEffect(() => {
@@ -72,7 +75,8 @@ export default function OnBoardingForm() {
         <Input
           id='email'
           name='email'
-          placeholder='name@example.com'
+          defaultValue={email}
+          disabled
           required
           type='email'
         />

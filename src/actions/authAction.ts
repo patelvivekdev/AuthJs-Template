@@ -1,5 +1,6 @@
 'use server';
-import { createUser, createVerificationToken } from '@/db/query/User';
+import { createVerificationToken } from '@/db/query/Token';
+import { createUser } from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser } from '@/auth';
 
@@ -58,10 +59,14 @@ const onBoardingSchema = z.object({
   password2: z.string(),
 });
 
-export async function onBoarding(prevState: any, formData: FormData) {
+export async function onBoarding(
+  email: string,
+  prevState: any,
+  formData: FormData,
+) {
   const validatedFields = onBoardingSchema.safeParse({
     name: formData.get('name'),
-    email: formData.get('email'),
+    email: email,
     username: formData.get('username'),
     password: formData.get('password'),
     password2: formData.get('password2'),
@@ -92,10 +97,9 @@ export async function onBoarding(prevState: any, formData: FormData) {
   }
 
   try {
-    // Call the createUser function
     let user = await createUser(
       validatedFields.data.name,
-      validatedFields.data.email,
+      email,
       validatedFields.data.username,
       validatedFields.data.password,
     );

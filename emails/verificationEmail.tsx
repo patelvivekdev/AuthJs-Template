@@ -7,7 +7,6 @@ import {
   Hr,
   Html,
   Link,
-  Preview,
   Row,
   Section,
   Text,
@@ -29,7 +28,6 @@ export const VerificationEmail = ({
 }: VerificationEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your login code for Drizzle + Turso Auth</Preview>
     <Body style={main}>
       <Container style={container}>
         <Row>

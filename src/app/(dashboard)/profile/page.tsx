@@ -73,12 +73,12 @@ export default async function Dashboard() {
                   <div>
                     <h3 className='text-lg font-medium'>Google</h3>
                     <p className='text-gray-500 dark:text-gray-400'>
-                      Connected as john@example.com
+                      Not connected
                     </p>
                   </div>
                 </div>
                 <Button size='sm' variant='outline'>
-                  Disconnect
+                  Connect
                 </Button>
               </div>
               <div className='flex items-center justify-between'>
@@ -87,15 +87,15 @@ export default async function Dashboard() {
                   <div>
                     <h3 className='text-lg font-medium'>GitHub</h3>
                     <p className='text-gray-500 dark:text-gray-400'>
-                      Connected as johndoe
+                      Not connected
                     </p>
                   </div>
                 </div>
                 <Button size='sm' variant='outline'>
-                  Disconnect
+                  Connect
                 </Button>
               </div>
-              <div className='flex items-center justify-between'>
+              {/* <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>
                   <Icons.twitter className='mr-2 h-6 w-6 fill-current' />
                   <div>
@@ -108,7 +108,7 @@ export default async function Dashboard() {
                 <Button size='sm' variant='outline'>
                   Connect
                 </Button>
-              </div>
+              </div> */}
               <div className='mt-4 flex flex-col justify-between gap-2 border-t-2 pt-4'>
                 <div className='flex items-center space-x-4'>
                   <div>
