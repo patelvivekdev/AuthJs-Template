@@ -50,6 +50,8 @@ export function GoogleSignIn() {
       action={async () => {
         'use server';
         await signIn('google', {
+          redirectTo: '/profile',
+          redirect: true,
           callbackUrl: '/',
         });
       }}
