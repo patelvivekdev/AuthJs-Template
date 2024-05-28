@@ -12,6 +12,7 @@ import { Icons } from '@/components/icons';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserById } from '@/db/query/User';
+import Link from 'next/link';
 
 export default async function Dashboard() {
   const session = await auth();
@@ -57,9 +58,21 @@ export default async function Dashboard() {
                 <Label htmlFor='password'>Password</Label>
                 <Input id='password' placeholder='••••••••' type='password' />
               </div> */}
-              <Button className='w-full' type='submit' disabled>
-                Update Profile
-              </Button>
+              <div className='flex flex-col gap-2'>
+                <Link href='/profile/change-password'>
+                  <Button
+                    className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
+                    type='submit'
+                  >
+                    Change Password
+                  </Button>
+                </Link>
+                <Link href='/profile/edit'>
+                  <Button className='w-full' type='submit'>
+                    Update Profile
+                  </Button>
+                </Link>
+              </div>
             </form>
           </CardContent>
         </Card>

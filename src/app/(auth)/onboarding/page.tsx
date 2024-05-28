@@ -1,7 +1,5 @@
 import { getVerificationToken } from '@/db/query/Token';
 import OnBoardingForm from './OnBoardingForm';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
 export default async function onBoarding({
@@ -13,7 +11,14 @@ export default async function onBoarding({
 }) {
   const token = searchParams?.code || '';
   if (token === '') {
-    return <TokenNotFound />;
+    return (
+      <TokenNotFound
+        header='Token not found'
+        description='Please check your email for the token'
+        url='/'
+        buttonText='Back to home'
+      />
+    );
   }
 
   const data = await getVerificationToken(token);
@@ -21,24 +26,24 @@ export default async function onBoarding({
   // check expires of token
   if (data.data?.expires! < new Date()) {
     return (
-      <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
-        <div className='m-4 mx-auto flex flex-col gap-2 rounded-lg p-8 text-center shadow-lg shadow-black dark:shadow-white'>
-          <h1 className='text-4xl font-extrabold tracking-tight lg:text-5xl'>
-            Token expired!
-          </h1>
-          <p className='text-sm text-gray-500 dark:text-gray-400'>
-            Please create a new account
-          </p>
-          <Link href='/sign-up'>
-            <Button>Sign Up</Button>
-          </Link>
-        </div>
-      </div>
+      <TokenNotFound
+        header='Token expired'
+        description='Token expired, please try again with a new token.'
+        url='/sign-up'
+        buttonText='Try again'
+      />
     );
   }
 
   if (!data.success) {
-    return <TokenNotFound />;
+    return (
+      <TokenNotFound
+        header='Token is invalid'
+        description='Token is invalid, please try again with a new token.'
+        url='/sign-up'
+        buttonText='Sign Up'
+      />
+    );
   }
   return (
     <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>

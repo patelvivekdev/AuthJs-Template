@@ -3,7 +3,7 @@ import {
   createTokenForCreateUser,
   createTokenForForgotPassword,
 } from '@/db/query/Token';
-import { createUser } from '@/db/query/User';
+import { createUser, savePassword } from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser } from '@/auth';
 
@@ -106,7 +106,7 @@ export async function onBoarding(
       validatedFields.data.password,
     );
 
-    if (!user) {
+    if (user.length === 0) {
       return {
         type: 'error',
         errors: null,
@@ -225,6 +225,144 @@ export async function forgotPassword(prevState: any, formData: FormData) {
       type: 'error',
       errors: null,
       message: error.message || 'Failed to send email.',
+    };
+  }
+}
+
+// =============================== resetPassword ===============================
+const resetPasswordSchema = z.object({
+  password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
+  password2: z.string(),
+});
+
+export async function resetPassword(
+  email: string,
+  prevState: any,
+  formData: FormData,
+) {
+  const validatedFields = resetPasswordSchema.safeParse({
+    password: formData.get('password'),
+    password2: formData.get('password2'),
+  });
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    return {
+      type: 'error',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to reset password.',
+    };
+  }
+
+  // check for password match
+  if (validatedFields.data.password !== validatedFields.data.password2) {
+    return {
+      type: 'error',
+      errors: {
+        password: undefined,
+        password2: 'Passwords do not match',
+      },
+      message: 'Make sure passwords match. Failed to reset password.',
+    };
+  }
+
+  try {
+    let user = await savePassword(false, email, validatedFields.data.password);
+
+    if (!user.success) {
+      return {
+        type: 'error',
+        errors: null,
+        message: user.message || 'Failed to reset password.',
+      };
+    }
+    return {
+      type: 'success',
+      errors: null,
+      message: user.message || 'Password reset successfully.',
+    };
+  } catch (error: any) {
+    console.error('Failed to reset password.', error);
+    return {
+      type: 'error',
+      errors: null,
+      message: error.message || 'Failed to reset password.',
+    };
+  }
+}
+
+// =============================== changePassword ===============================
+const changePasswordSchema = z.object({
+  oldPassword: z.string(),
+  newPassword: z
+    .string()
+    .min(8, { message: 'Must be 8 or more characters long' }),
+  password2: z.string(),
+});
+
+export async function changePassword(
+  email: string,
+  prevState: any,
+  formData: FormData,
+) {
+  const validatedFields = changePasswordSchema.safeParse({
+    oldPassword: formData.get('oldPassword'),
+    newPassword: formData.get('newPassword'),
+    password2: formData.get('password2'),
+  });
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    return {
+      type: 'error',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to change password.',
+    };
+  }
+
+  // check for password match
+  if (validatedFields.data.newPassword !== validatedFields.data.password2) {
+    return {
+      type: 'error',
+      errors: {
+        oldPassword: undefined,
+        newPassword: undefined,
+        password2: 'Passwords do not match',
+      },
+      message: 'Make sure passwords match. Failed to change password.',
+    };
+  }
+
+  try {
+    let user = await savePassword(
+      true,
+      email,
+      validatedFields.data.newPassword,
+      validatedFields.data.oldPassword,
+    );
+
+    if (!user.success) {
+      return {
+        type: 'error',
+        errors: {
+          oldPassword: "Old password doesn't match.",
+          newPassword: undefined,
+          password2: undefined,
+        },
+        message: user.message || 'Failed to change password.',
+      };
+    }
+    return {
+      type: 'success',
+      errors: null,
+      message: user.message || 'Password change successfully.',
+    };
+  } catch (error: any) {
+    console.error('Failed to change password.', error);
+    return {
+      type: 'error',
+      errors: null,
+      message: error.message || 'Failed to change password.',
     };
   }
 }
