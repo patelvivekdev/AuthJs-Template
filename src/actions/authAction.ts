@@ -6,10 +6,11 @@ import {
 import { createUser, savePassword } from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser } from '@/auth';
+import { redirect } from 'next/navigation';
 
 // =============================== signUp ===============================
 const signUpSchema = z.object({
-  email: z.string().email('Please enter valid message').min(5),
+  email: z.string().email('Please enter valid email address.').min(5),
 });
 
 export async function signUp(prevState: any, formData: FormData) {
@@ -22,7 +23,7 @@ export async function signUp(prevState: any, formData: FormData) {
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to signUp.',
+      message: 'Missing Fields!!',
     };
   }
 
@@ -32,7 +33,9 @@ export async function signUp(prevState: any, formData: FormData) {
     if (!emailData.success) {
       return {
         type: 'error',
-        errors: null,
+        errors: {
+          email: undefined,
+        },
         message: 'Failed to signUp.',
       };
     }
@@ -46,7 +49,9 @@ export async function signUp(prevState: any, formData: FormData) {
     console.error('Failed to signUp', error);
     return {
       type: 'error',
-      errors: null,
+      errors: {
+        email: undefined,
+      },
       message: error.message || 'Failed to signUp.',
     };
   }
@@ -56,7 +61,7 @@ export async function signUp(prevState: any, formData: FormData) {
 const onBoardingSchema = z.object({
   name: z.string().min(2, { message: 'Must be 2 or more characters long' }),
   username: z.string().min(3, { message: 'Must be 3 or more characters long' }),
-  email: z.string().email('Please enter valid message').min(5),
+  email: z.string().email('Please enter valid email address.').min(5),
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
   password2: z.string(),
 });
@@ -79,7 +84,7 @@ export async function onBoarding(
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to signUp.',
+      message: 'Missing Fields!!',
     };
   }
 
@@ -92,9 +97,9 @@ export async function onBoarding(
         username: undefined,
         email: undefined,
         password: undefined,
-        password2: 'Passwords do not match',
+        password2: undefined,
       },
-      message: 'Passwords do not match. Failed to signUp.',
+      message: 'Passwords do not match.',
     };
   }
 
@@ -109,8 +114,14 @@ export async function onBoarding(
     if (user.length === 0) {
       return {
         type: 'error',
-        errors: null,
-        message: 'Failed to signUp.',
+        errors: {
+          name: undefined,
+          username: undefined,
+          email: undefined,
+          password: undefined,
+          password2: undefined,
+        },
+        message: 'Failed to signUp. Please try again.',
       };
     }
 
@@ -123,7 +134,13 @@ export async function onBoarding(
     console.error('Failed to signUp', error);
     return {
       type: 'error',
-      errors: null,
+      errors: {
+        name: undefined,
+        username: undefined,
+        email: undefined,
+        password: undefined,
+        password2: undefined,
+      },
       message: error.message || 'Failed to signUp.',
     };
   }
@@ -146,46 +163,43 @@ export async function signIn(prevState: any, formData: FormData) {
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to signIn.',
+      message: 'Missing Fields!!',
     };
   }
 
-  // Call the loginUser function
-  let user = await signInUser('credentials', {
-    username: validatedFields.data.username,
-    password: validatedFields.data.password,
-    redirect: true,
-    redirectTo: '/profile',
-  });
-
-  if (!user) {
-    return {
-      type: 'error',
-      errors: null,
-      message: 'Invalid username or password.',
-    };
+  try {
+    await signInUser('credentials', {
+      username: validatedFields.data.username,
+      password: validatedFields.data.password,
+      redirect: false,
+    });
+  } catch (error: any) {
+    if (error.code === 'invalid-credentials') {
+      return {
+        type: 'error',
+        errors: {
+          username: undefined,
+          password: undefined,
+        },
+        message: error.message,
+      };
+    } else {
+      return {
+        type: 'error',
+        errors: {
+          username: undefined,
+          password: undefined,
+        },
+        message: 'Something went wrong. Please try again.',
+      };
+    }
   }
-
-  return {
-    type: 'success',
-    errors: null,
-    message: 'Successfully signed in.',
-  };
-
-  // try {
-  // } catch (error: any) {
-  //   console.error('Failed to signIn', error);
-  //   return {
-  //     type: 'error',
-  //     errors: null,
-  //     message: error.message || 'Failed to signIn.',
-  //   };
-  // }
+  redirect('/profile');
 }
 
 // =============================== forgotPassword ===============================
 const forgetPasswordSchema = z.object({
-  email: z.string().email('Please enter valid message').min(5),
+  email: z.string().email('Please enter valid email address.').min(5),
 });
 
 export async function forgotPassword(prevState: any, formData: FormData) {
@@ -197,7 +211,7 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to send email.',
+      message: 'Missing Fields!!',
     };
   }
 
@@ -209,7 +223,9 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     if (!emailData.success) {
       return {
         type: 'error',
-        errors: null,
+        errors: {
+          email: undefined,
+        },
         message: emailData.message || 'Failed to send email. Please try again.',
       };
     }
@@ -223,7 +239,9 @@ export async function forgotPassword(prevState: any, formData: FormData) {
     console.error('Failed to send email', error);
     return {
       type: 'error',
-      errors: null,
+      errors: {
+        email: undefined,
+      },
       message: error.message || 'Failed to send email.',
     };
   }
@@ -250,7 +268,7 @@ export async function resetPassword(
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to reset password.',
+      message: 'Missing Fields!!',
     };
   }
 
@@ -260,9 +278,9 @@ export async function resetPassword(
       type: 'error',
       errors: {
         password: undefined,
-        password2: 'Passwords do not match',
+        password2: undefined,
       },
-      message: 'Make sure passwords match. Failed to reset password.',
+      message: 'Passwords do not match.',
     };
   }
 
@@ -272,7 +290,10 @@ export async function resetPassword(
     if (!user.success) {
       return {
         type: 'error',
-        errors: null,
+        errors: {
+          password: undefined,
+          password2: undefined,
+        },
         message: user.message || 'Failed to reset password.',
       };
     }
@@ -285,7 +306,10 @@ export async function resetPassword(
     console.error('Failed to reset password.', error);
     return {
       type: 'error',
-      errors: null,
+      errors: {
+        password: undefined,
+        password2: undefined,
+      },
       message: error.message || 'Failed to reset password.',
     };
   }
@@ -316,7 +340,7 @@ export async function changePassword(
     return {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to change password.',
+      message: 'Missing Fields!!',
     };
   }
 
@@ -327,9 +351,9 @@ export async function changePassword(
       errors: {
         oldPassword: undefined,
         newPassword: undefined,
-        password2: 'Passwords do not match',
+        password2: undefined,
       },
-      message: 'Make sure passwords match. Failed to change password.',
+      message: 'Passwords do not match.',
     };
   }
 
@@ -345,7 +369,7 @@ export async function changePassword(
       return {
         type: 'error',
         errors: {
-          oldPassword: "Old password doesn't match.",
+          oldPassword: undefined,
           newPassword: undefined,
           password2: undefined,
         },
@@ -361,7 +385,11 @@ export async function changePassword(
     console.error('Failed to change password.', error);
     return {
       type: 'error',
-      errors: null,
+      errors: {
+        oldPassword: undefined,
+        newPassword: undefined,
+        password2: undefined,
+      },
       message: error.message || 'Failed to change password.',
     };
   }

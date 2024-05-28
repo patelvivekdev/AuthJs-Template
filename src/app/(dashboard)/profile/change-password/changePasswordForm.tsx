@@ -42,9 +42,9 @@ export default function ChangePasswordForm({ email }: { email: string }) {
   return (
     <form action={submitAction} className='space-y-4'>
       {state.errors && (
-        <p className='rounded-md border-2 bg-red-400 px-2 py-4'>
-          {state.message}
-        </p>
+        <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
+          <p className='text-red-500'>{state.message}</p>
+        </div>
       )}
       <div className='grid gap-2'>
         <Label htmlFor='oldPassword'>Current Password</Label>

@@ -53,8 +53,7 @@ export default async function ResetPasswordPage({
             Reset Password
           </h1>
           <p className='text-sm text-gray-500 dark:text-gray-400'>
-            Enter your new password and confirm it. Make sure to use a strong
-            and unique password.
+            Enter your new strong and unique password.
           </p>
         </div>
         <ResetPasswordForm email={data.data?.identifier!} />

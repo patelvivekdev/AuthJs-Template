@@ -1,13 +1,10 @@
 'use client';
 // import { useActionState } from 'react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { signIn } from '@/actions/authAction';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { SubmitButton } from '@/components/SubmitButton';
-import { useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
@@ -21,21 +18,15 @@ const initialState = {
 export default function SignInForm() {
   // const [state, submitAction, isPending] = useActionState(signUp, initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const [state, submitAction] = useFormState(signIn, initialState);
-
-  const router = useRouter();
-  useEffect(() => {
-    if (state.type === 'success') {
-      toast.success(state.message);
-      router.push('/');
-    } else if (state.type === 'error') {
-      toast.error(state.message);
-    }
-  }, [state]);
+  const [state, submitAction] = useFormState(signIn, initialState as any);
 
   return (
     <form action={submitAction} className='space-y-6'>
-      {state.errors && <p className='text-red-500'>{state.message}</p>}
+      {state.errors && (
+        <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
+          <p className='text-red-500'>{state.message}</p>
+        </div>
+      )}
       <div className='grid gap-2'>
         <Label htmlFor='username'>Username</Label>
         <Input

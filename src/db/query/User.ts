@@ -3,7 +3,7 @@ import { users, accounts } from '../schema';
 import { eq, or } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
-export const loginUser = async (username: string, password: string) => {
+export const loginUser = async (username: string) => {
   // check if user is sign up with oauth
   const user = await db
     .select()
@@ -12,16 +12,7 @@ export const loginUser = async (username: string, password: string) => {
       or(eq(users.username, username.trim()), eq(users.email, username.trim())),
     );
 
-  if (user.length === 0) {
-    return null;
-  }
-
-  const isValid = await bcrypt.compare(password, user[0].password!);
-
-  if (!isValid) {
-    return null;
-  }
-  return user[0];
+  return user;
 };
 
 export const getUserById = async (id: string) => {

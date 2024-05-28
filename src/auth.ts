@@ -1,10 +1,16 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthError } from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
 import { loginUser } from './db/query/User';
+import bcrypt from 'bcryptjs';
+
+class InvalidCredentialsError extends AuthError {
+  code = 'invalid-credentials';
+  message = 'Invalid credentials';
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -19,27 +25,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          if (!credentials.username || !credentials.password) {
-            return null;
+          const user = await loginUser(credentials.username as string);
+
+          if (user.length === 0) {
+            throw new InvalidCredentialsError();
           }
 
-          const user = await loginUser(
-            credentials.username as string,
+          const isValid = await bcrypt.compare(
             credentials.password as string,
+            user[0].password!,
           );
 
-          if (!user) {
-            return null;
+          if (!isValid) {
+            throw new InvalidCredentialsError();
           }
-          return user;
+          return user[0];
         } catch (error: any) {
-          console.log(error);
-          return null;
-          // if (error instanceof AuthError) {
-          //   throw new InvalidTypeError(error.message);
-          // } else {
-          //   throw error;
-          // }
+          if (error instanceof AuthError) {
+            throw new InvalidCredentialsError(error.message);
+          } else {
+            throw error;
+          }
         }
       },
     }),
@@ -47,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const paths = ['/profile', '/client-side', '/api/session'];
+      const paths = ['/profile', '/dashboard'];
       const isProtected = paths.some((path) =>
         nextUrl.pathname.startsWith(path),
       );
