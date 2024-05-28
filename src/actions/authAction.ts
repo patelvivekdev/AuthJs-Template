@@ -1,5 +1,8 @@
 'use server';
-import { createVerificationToken } from '@/db/query/Token';
+import {
+  createTokenForCreateUser,
+  createTokenForForgotPassword,
+} from '@/db/query/Token';
 import { createUser } from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser } from '@/auth';
@@ -24,8 +27,7 @@ export async function signUp(prevState: any, formData: FormData) {
   }
 
   try {
-    // Call the createUser function
-    let emailData = await createVerificationToken(validatedFields.data.email);
+    let emailData = await createTokenForCreateUser(validatedFields.data.email);
 
     if (!emailData.success) {
       return {
@@ -179,4 +181,50 @@ export async function signIn(prevState: any, formData: FormData) {
   //     message: error.message || 'Failed to signIn.',
   //   };
   // }
+}
+
+// =============================== forgotPassword ===============================
+const forgetPasswordSchema = z.object({
+  email: z.string().email('Please enter valid message').min(5),
+});
+
+export async function forgotPassword(prevState: any, formData: FormData) {
+  const validatedFields = forgetPasswordSchema.safeParse({
+    email: formData.get('email'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      type: 'error',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to send email.',
+    };
+  }
+
+  try {
+    let emailData = await createTokenForForgotPassword(
+      validatedFields.data.email,
+    );
+
+    if (!emailData.success) {
+      return {
+        type: 'error',
+        errors: null,
+        message: emailData.message || 'Failed to send email. Please try again.',
+      };
+    }
+
+    return {
+      type: 'success',
+      errors: null,
+      message: 'Please check your email for next step',
+    };
+  } catch (error: any) {
+    console.error('Failed to send email', error);
+    return {
+      type: 'error',
+      errors: null,
+      message: error.message || 'Failed to send email.',
+    };
+  }
 }

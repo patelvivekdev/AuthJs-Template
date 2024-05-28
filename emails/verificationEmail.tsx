@@ -7,6 +7,7 @@ import {
   Hr,
   Html,
   Link,
+  Preview,
   Row,
   Section,
   Text,
@@ -16,6 +17,7 @@ import * as React from 'react';
 interface VerificationEmailProps {
   email?: string;
   validationCode?: string;
+  time: number;
 }
 
 const baseUrl = process.env.BASE_URL
@@ -25,38 +27,36 @@ const baseUrl = process.env.BASE_URL
 export const VerificationEmail = ({
   email,
   validationCode,
+  time,
 }: VerificationEmailProps) => (
   <Html>
     <Head />
+    <Preview>Your login code for Drizzle + Turso Auth</Preview>
     <Body style={main}>
       <Container style={container}>
         <Row>
           <Heading as='h2'>Hello {email},</Heading>
         </Row>
-
-        <Heading style={heading}>
-          Your login code for Drizzle + Turso Auth
-        </Heading>
-        <Section style={buttonContainer}>
+        <Section>
           <Button
             style={button}
             href={`${baseUrl}/onboarding?code=${validationCode}`}
           >
             Click to proceed
           </Button>
+          <Text style={text}>
+            This link and code will only be valid for the next {time} minutes.
+            If the link does not work, you can copy and paste the following URL
+            into your browser:
+          </Text>
+          <code style={code}>
+            {`${baseUrl}/onboarding?code=${validationCode}`}
+          </code>
+          <Hr style={hr} />
+          <Link href={baseUrl} style={reportLink}>
+            Drizzle + Turso + Next-Auth
+          </Link>
         </Section>
-        <Text style={paragraph}>
-          This link and code will only be valid for the next 5 minutes. If the
-          link does not work, you can copy and paste the following URL into your
-          browser:
-        </Text>
-        <code
-          style={code}
-        >{`${baseUrl}/onboarding?code=${validationCode}`}</code>
-        <Hr style={hr} />
-        <Link href={baseUrl} style={reportLink}>
-          Drizzle + Turso + Next-Auth
-        </Link>
       </Container>
     </Body>
   </Html>
@@ -65,42 +65,31 @@ export const VerificationEmail = ({
 export default VerificationEmail;
 
 const main = {
-  backgroundColor: '#ffffff',
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+  backgroundColor: '#f6f9fc',
+  padding: '10px 0',
 };
 
 const container = {
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  maxWidth: '560px',
+  backgroundColor: '#ffffff',
+  border: '1px solid #f0f0f0',
+  padding: '45px',
 };
 
-const heading = {
-  fontSize: '24px',
-  letterSpacing: '-0.5px',
-  lineHeight: '1.3',
-  fontWeight: '400',
-  color: '#484848',
-  padding: '17px 0 0',
-};
-
-const paragraph = {
-  margin: '0 0 15px',
-  fontSize: '15px',
-  lineHeight: '1.4',
-  color: '#3c4149',
-};
-
-const buttonContainer = {
-  padding: '27px 0 27px',
+const text = {
+  fontSize: '16px',
+  fontFamily:
+    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+  fontWeight: '300',
+  color: '#404040',
+  lineHeight: '26px',
 };
 
 const button = {
-  backgroundColor: '#5e6ad2',
-  borderRadius: '3px',
+  backgroundColor: '#2e026d',
+  borderRadius: '4px',
   fontWeight: '600',
   color: '#fff',
+  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
   fontSize: '15px',
   textDecoration: 'none',
   textAlign: 'center' as const,

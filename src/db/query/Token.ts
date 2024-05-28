@@ -1,9 +1,9 @@
 import { db } from '..';
 import { verificationTokens, users, accounts } from '../schema';
-import { sendVerificationEmail } from '@/lib/Email';
+import { sendVerificationEmail, sendForgotPasswordEmail } from '@/lib/Email';
 import { eq, and, or } from 'drizzle-orm';
 
-export const createVerificationToken = async (email: string) => {
+export const createTokenForCreateUser = async (email: string) => {
   let token = crypto.randomUUID();
   let expires = new Date();
   expires.setMinutes(expires.getMinutes() + 5);
@@ -40,7 +40,7 @@ export const createVerificationToken = async (email: string) => {
     .values({ identifier: email, token, expires })
     .returning();
 
-  let emailData = await sendVerificationEmail(email, token);
+  let emailData = await sendVerificationEmail(email, token, 5);
   return emailData;
 };
 
@@ -61,4 +61,42 @@ export const getVerificationToken = async (token: string) => {
       data: null,
     };
   }
+};
+
+export const createTokenForForgotPassword = async (email: string) => {
+  // check if user exists with email and account provider as email
+  const existingUser = await db
+    .select()
+    .from(users)
+    .leftJoin(accounts, eq(accounts.userId, users.id))
+    .where(and(eq(users.email, email.trim()), eq(accounts.type, 'email')))
+    .groupBy(users.id);
+
+  if (existingUser.length === 0) {
+    return { success: false, message: 'User not found!' };
+  }
+  const user = existingUser[0].user;
+
+  let token = crypto.randomUUID();
+  let expires = new Date();
+  expires.setMinutes(expires.getMinutes() + 10);
+
+  await db
+    .insert(verificationTokens)
+    .values({ identifier: email, token, expires })
+    .returning();
+
+  const baseUrl = process.env.BASE_URL
+    ? `${process.env.BASE_URL}`
+    : 'http://localhost:3000';
+
+  let resetPasswordLink = `${baseUrl}/reset-password?token=${token}`;
+
+  let emailData = await sendForgotPasswordEmail(
+    user.email,
+    user.name!,
+    resetPasswordLink,
+    10,
+  );
+  return emailData;
 };
