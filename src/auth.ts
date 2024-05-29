@@ -6,6 +6,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
 import { loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
+import { encode, decode } from 'next-auth/jwt';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -51,6 +52,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ account, profile }) {
+      console.log('account', account);
+      console.log('profile', profile);
+      if (account?.provider === 'google' || account?.provider === 'facebook') {
+        // Here you can handle additional logic for linking accounts
+      }
+      return true;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const paths = ['/profile', '/dashboard'];
@@ -81,6 +90,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   session: { strategy: 'jwt' },
+  jwt: { encode, decode },
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/sign-in',

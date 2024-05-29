@@ -1,5 +1,5 @@
 import { db } from '..';
-import { users, accounts } from '../schema';
+import { users, accounts, InsertAccounts } from '../schema';
 import { eq, or } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
@@ -118,3 +118,34 @@ export const savePassword = async (
     };
   }
 };
+
+// Function to get user by email
+export async function getAdapterUser(email: string) {
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  return user;
+}
+
+// Function to link account to user
+export async function linkAccountToUser(
+  userId: string,
+  accountData: InsertAccounts,
+) {
+  await db.insert(accounts).values({
+    userId,
+    type: accountData.type,
+    provider: accountData.provider,
+    providerAccountId: accountData.providerAccountId,
+    access_token: accountData.access_token,
+    refresh_token: accountData.refresh_token,
+    expires_at: accountData.expires_at,
+    token_type: accountData.token_type,
+    scope: accountData.scope,
+    id_token: accountData.id_token,
+    session_state: accountData.session_state,
+  });
+}
