@@ -2,6 +2,7 @@
 import {
   createTokenForCreateUser,
   createTokenForForgotPassword,
+  deleteToken,
 } from '@/db/query/Token';
 import { createUser, savePassword } from '@/db/query/User';
 import { z } from 'zod';
@@ -124,6 +125,9 @@ export async function onBoarding(
         message: 'Failed to signUp. Please try again.',
       };
     }
+
+    // delete the token
+    await deleteToken(email);
 
     return {
       type: 'success',
@@ -297,6 +301,10 @@ export async function resetPassword(
         message: user.message || 'Failed to reset password.',
       };
     }
+
+    // delete the token
+    await deleteToken(email);
+
     return {
       type: 'success',
       errors: null,

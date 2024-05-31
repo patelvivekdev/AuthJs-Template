@@ -100,3 +100,9 @@ export const createTokenForForgotPassword = async (email: string) => {
   );
   return emailData;
 };
+
+export const deleteToken = async (email: string) => {
+  await db
+    .delete(verificationTokens)
+    .where(eq(verificationTokens.identifier, email));
+};
