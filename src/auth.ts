@@ -52,9 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
-      console.log('account', account);
-      console.log('profile', profile);
+    async signIn({ account }) {
       if (account?.provider === 'google' || account?.provider === 'facebook') {
         // Here you can handle additional logic for linking accounts
       }
