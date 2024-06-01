@@ -9,7 +9,7 @@ import {
 
 export default function Dashboard() {
   return (
-    <div className='container mx-auto py-12'>
+    <div className='container mx-auto p-12'>
       <Card>
         <CardHeader>
           <CardTitle>Welcome to your dashboard</CardTitle>

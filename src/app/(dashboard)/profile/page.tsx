@@ -13,6 +13,9 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserById } from '@/db/query/User';
 import Link from 'next/link';
+import DeleteAccount from './deleteAccountForm';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Edit } from 'lucide-react';
 
 export default async function Dashboard() {
   const session = await auth();
@@ -36,6 +39,13 @@ export default async function Dashboard() {
           </CardHeader>
           <CardContent>
             <form className='space-y-4'>
+              <div className='flex flex-row items-center gap-2'>
+                <Avatar>
+                  <AvatarImage src={user.image!} alt={user.name!} />
+                  <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <Edit className='h-4 w-4' />
+              </div>
               <div>
                 <Label htmlFor='name'>Name</Label>
                 <Input
@@ -58,7 +68,7 @@ export default async function Dashboard() {
                 <Label htmlFor='password'>Password</Label>
                 <Input id='password' placeholder='••••••••' type='password' />
               </div> */}
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-row justify-center gap-2'>
                 <Link href='/profile/change-password'>
                   <Button
                     className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
@@ -69,7 +79,7 @@ export default async function Dashboard() {
                 </Link>
                 <Link href='/profile/edit'>
                   <Button className='w-full' type='submit'>
-                    Update Profile
+                    Edit Profile
                   </Button>
                 </Link>
               </div>
@@ -143,20 +153,7 @@ export default async function Dashboard() {
                   Connect
                 </Button>
               </div> */}
-              <div className='mt-4 flex flex-col justify-between gap-2 border-t-2 pt-4'>
-                <div className='flex items-center space-x-4'>
-                  <div>
-                    <h3 className='text-lg font-medium'>Delete Account</h3>
-                    <p className='text-gray-500 dark:text-gray-400'>
-                      Once you delete your account, there is no going back.
-                      Please be certain.
-                    </p>
-                  </div>
-                </div>
-                <Button size='sm' variant='destructive'>
-                  Delete Account
-                </Button>
-              </div>
+              <DeleteAccount userId={user?.id!} />
             </div>
           </CardContent>
         </Card>
