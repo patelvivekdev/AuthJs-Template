@@ -14,12 +14,12 @@ import {
 import { z } from 'zod';
 import { signIn as signInUser, signOut } from '@/auth';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 // =============================== signUp ===============================
 const signUpSchema = z.object({
   email: z.string().email('Please enter valid email address.').min(5),
 });
-
 export async function signUp(prevState: any, formData: FormData) {
   const validatedFields = signUpSchema.safeParse({
     email: formData.get('email'),
@@ -72,7 +72,6 @@ const onBoardingSchema = z.object({
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
   password2: z.string(),
 });
-
 export async function onBoarding(
   email: string,
   prevState: any,
@@ -161,7 +160,6 @@ const signInSchema = z.object({
   username: z.string().min(3, { message: 'Must be 3 or more characters long' }),
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
 });
-
 export async function signIn(prevState: any, formData: FormData) {
   const validatedFields = signInSchema.safeParse({
     username: formData.get('username'),
@@ -211,7 +209,6 @@ export async function signIn(prevState: any, formData: FormData) {
 const forgetPasswordSchema = z.object({
   email: z.string().email('Please enter valid email address.').min(5),
 });
-
 export async function forgotPassword(prevState: any, formData: FormData) {
   const validatedFields = forgetPasswordSchema.safeParse({
     email: formData.get('email'),
@@ -262,7 +259,6 @@ const resetPasswordSchema = z.object({
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
   password2: z.string(),
 });
-
 export async function resetPassword(
   email: string,
   prevState: any,
@@ -329,12 +325,11 @@ export async function resetPassword(
   }
 }
 
-// =============================== resetPassword ===============================
+// =============================== addPassword ===============================
 const addPasswordSchema = z.object({
   password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
   password2: z.string(),
 });
-
 export async function addPassword(
   email: string,
   prevState: any,
@@ -437,7 +432,6 @@ const changePasswordSchema = z.object({
     .min(8, { message: 'Must be 8 or more characters long' }),
   password2: z.string(),
 });
-
 export async function changePassword(
   email: string,
   prevState: any,
@@ -512,8 +506,7 @@ export async function changePassword(
 // =============================== deleteAccount ===============================
 export async function deleteAccount(userId: string) {
   await deleteUser(userId);
-  await signOut({
-    redirectTo: '/',
-    redirect: true,
-  });
+  await signOut();
+  revalidatePath('/', 'layout');
+  redirect('/');
 }

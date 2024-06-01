@@ -4,7 +4,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import { loginUser } from './db/query/User';
+import { getUserById, loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 
@@ -93,18 +93,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    jwt: ({ token, user }) => {
+    jwt: async ({ token }) => {
+      const user = await getUserById(token.sub!);
       if (user) {
-        const u = user as unknown as any;
-        return {
-          ...token,
-          id: u.id,
-        };
+        token.user = user;
+        return token;
+      } else {
+        return null;
       }
-      return token;
     },
     session: async ({ session, token }) => {
-      session.user.id = token.sub!;
+      if (token) {
+        // @ts-ignore
+        session.user = token.user;
+        session.user.id = token.sub!;
+        return session;
+      }
       return session;
     },
   },
