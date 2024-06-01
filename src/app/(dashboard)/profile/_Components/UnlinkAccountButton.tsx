@@ -1,6 +1,16 @@
 // // components/UnlinkAccountButton.tsx
 // import React from 'react';
 
+import { Button } from '@/components/ui/button';
+
+export default function UnlinkAccountButton() {
+  return (
+    <Button size='sm' variant='destructive'>
+      Disconnect
+    </Button>
+  );
+}
+
 // interface UnlinkAccountButtonProps {
 //   userId: string;
 //   provider: string;

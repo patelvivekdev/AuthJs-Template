@@ -149,3 +149,8 @@ export async function linkAccountToUser(
     session_state: accountData.session_state,
   });
 }
+
+// Delete user
+export async function deleteUser(userId: string) {
+  await db.delete(users).where(eq(users.id, userId));
+}

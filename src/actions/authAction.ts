@@ -4,9 +4,9 @@ import {
   createTokenForForgotPassword,
   deleteToken,
 } from '@/db/query/Token';
-import { createUser, savePassword } from '@/db/query/User';
+import { createUser, deleteUser, savePassword } from '@/db/query/User';
 import { z } from 'zod';
-import { signIn as signInUser } from '@/auth';
+import { signIn as signInUser, signOut } from '@/auth';
 import { redirect } from 'next/navigation';
 
 // =============================== signUp ===============================
@@ -401,4 +401,13 @@ export async function changePassword(
       message: error.message || 'Failed to change password.',
     };
   }
+}
+
+// =============================== deleteAccount ===============================
+export async function deleteAccount(userId: string) {
+  await deleteUser(userId);
+  await signOut({
+    redirectTo: '/',
+    redirect: true,
+  });
 }

@@ -13,7 +13,9 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserById } from '@/db/query/User';
 import Link from 'next/link';
-import DeleteAccount from './deleteAccountForm';
+import DeleteAccount from './_Components/DeleteAccountButton';
+import LinkAccountButton from './_Components/LinkAccountButton';
+import UnlinkAccountButton from './_Components/UnlinkAccountButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Edit } from 'lucide-react';
 
@@ -108,13 +110,9 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 {accounts?.includes('google') ? (
-                  <Button size='sm' variant='destructive'>
-                    Disconnect
-                  </Button>
+                  <UnlinkAccountButton />
                 ) : (
-                  <Button size='sm' variant='outline'>
-                    Connect
-                  </Button>
+                  <LinkAccountButton />
                 )}
               </div>
               <div className='flex items-center justify-between'>
@@ -130,13 +128,9 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 {accounts?.includes('github') ? (
-                  <Button size='sm' variant='destructive'>
-                    Disconnect
-                  </Button>
+                  <UnlinkAccountButton />
                 ) : (
-                  <Button size='sm' variant='outline'>
-                    Connect
-                  </Button>
+                  <LinkAccountButton />
                 )}
               </div>
               {/* <div className='flex items-center justify-between'>

@@ -1,3 +1,5 @@
+// import { useActionState } from 'react';
+import { deleteAccount } from '@/actions/authAction';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,9 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { SubmitButton } from '@/components/SubmitButton';
 
 export default function DeleteAccount({ userId }: { userId: string }) {
-  console.log('userId', userId);
+  // const [state, submitAction, isPending] = useActionState(deleteAccount, initialState);
+  const deleteAccountWithEmail = deleteAccount.bind(null, userId as string);
+
   return (
     <div className='m-4 flex flex-col justify-between gap-2 border-t-2 p-4'>
       <Dialog>
@@ -40,9 +45,9 @@ export default function DeleteAccount({ userId }: { userId: string }) {
                 Close
               </Button>
             </DialogClose>
-            <Button type='button' size='sm' variant='destructive'>
-              Delete Account
-            </Button>
+            <form action={deleteAccountWithEmail}>
+              <SubmitButton name='Delete Account' />
+            </form>
           </DialogFooter>
         </DialogContent>
       </Dialog>

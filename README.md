@@ -13,7 +13,7 @@ A template repo for starting authentication in your upcoming Next.js application
 - [ ] Profile Update | Protected
 - [ ] Profile Picture Update | Protected
 - [ ] Email Update | Protected
-- [ ] Delete Account | Protected
+- [x] Delete Account | Protected
 - [ ] Two Factor Authentication | Public
 - [ ] Account linking | Protected
 - [ ] Account Unlinking | Protected
