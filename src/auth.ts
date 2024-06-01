@@ -16,8 +16,21 @@ class InvalidCredentialsError extends AuthError {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [
-    Google({ allowDangerousEmailAccountLinking: true }),
-    Github({ allowDangerousEmailAccountLinking: true }),
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
+    Github({
+      async profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name ?? profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+          username: profile.login,
+        };
+      },
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       name: 'credentials',
       credentials: {
@@ -64,6 +77,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isProtected = paths.some((path) =>
         nextUrl.pathname.startsWith(path),
       );
+
+      const publicPath = ['/sign-in', '/sign-up'];
+      const isPublic = publicPath.some((path) =>
+        nextUrl.pathname.startsWith(path),
+      );
+      if (isPublic && isLoggedIn) {
+        return Response.redirect(new URL('/profile', nextUrl.origin));
+      }
 
       if (isProtected && !isLoggedIn) {
         const redirectUrl = new URL('/sign-in', nextUrl.origin);

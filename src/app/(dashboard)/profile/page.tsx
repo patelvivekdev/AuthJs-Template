@@ -18,6 +18,7 @@ import LinkAccountButton from './_Components/LinkAccountButton';
 import UnlinkAccountButton from './_Components/UnlinkAccountButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Edit } from 'lucide-react';
+import AddPasswordButton from './_Components/AddPasswordButton';
 
 export default async function Dashboard() {
   const session = await auth();
@@ -40,7 +41,7 @@ export default async function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form className='space-y-4'>
+            <div className='space-y-4'>
               <div className='flex flex-row items-center gap-2'>
                 <Avatar>
                   <AvatarImage src={user.image!} alt={user.name!} />
@@ -66,26 +67,26 @@ export default async function Dashboard() {
                   disabled
                 />
               </div>
-              {/* <div>
-                <Label htmlFor='password'>Password</Label>
-                <Input id='password' placeholder='••••••••' type='password' />
-              </div> */}
               <div className='flex flex-row justify-center gap-2'>
-                <Link href='/profile/change-password'>
-                  <Button
-                    className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
-                    type='submit'
-                  >
-                    Change Password
-                  </Button>
-                </Link>
+                {accounts?.includes('email') ? (
+                  <Link href='/profile/change-password'>
+                    <Button
+                      className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
+                      type='submit'
+                    >
+                      Change Password
+                    </Button>
+                  </Link>
+                ) : (
+                  <AddPasswordButton email={user?.email!} />
+                )}
                 <Link href='/profile/edit'>
                   <Button className='w-full' type='submit'>
                     Edit Profile
                   </Button>
                 </Link>
               </div>
-            </form>
+            </div>
           </CardContent>
         </Card>
         <Card>

@@ -119,6 +119,39 @@ export const savePassword = async (
   }
 };
 
+// Function to addPassword and create new account
+export const addPasswordWithAccount = async (
+  email: string,
+  password: string,
+) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    const user = await db
+      .update(users)
+      .set({ username: email, password: hashedPassword })
+      .where(eq(users.email, email))
+      .returning();
+
+    // create a account for the user
+    await db.insert(accounts).values({
+      userId: user[0].id,
+      type: 'email',
+      provider: 'email',
+      providerAccountId: email,
+    });
+    return {
+      success: true,
+      message: 'Password added successfully',
+    };
+  } catch (error: any) {
+    console.error('Error adding password and account:', error);
+    return {
+      success: false,
+      message: error.message || 'Failed to add password',
+    };
+  }
+};
+
 // Function to get user by email
 export async function getAdapterUser(email: string) {
   const user = await db

@@ -1,10 +1,16 @@
 'use server';
 import {
+  createTokenForAddPassword,
   createTokenForCreateUser,
   createTokenForForgotPassword,
   deleteToken,
 } from '@/db/query/Token';
-import { createUser, deleteUser, savePassword } from '@/db/query/User';
+import {
+  addPasswordWithAccount,
+  createUser,
+  deleteUser,
+  savePassword,
+} from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser, signOut } from '@/auth';
 import { redirect } from 'next/navigation';
@@ -319,6 +325,106 @@ export async function resetPassword(
         password2: undefined,
       },
       message: error.message || 'Failed to reset password.',
+    };
+  }
+}
+
+// =============================== resetPassword ===============================
+const addPasswordSchema = z.object({
+  password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
+  password2: z.string(),
+});
+
+export async function addPassword(
+  email: string,
+  prevState: any,
+  formData: FormData,
+) {
+  const validatedFields = addPasswordSchema.safeParse({
+    password: formData.get('password'),
+    password2: formData.get('password2'),
+  });
+
+  // Return early if the form data is invalid
+  if (!validatedFields.success) {
+    return {
+      type: 'error',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields!!',
+    };
+  }
+
+  // check for password match
+  if (validatedFields.data.password !== validatedFields.data.password2) {
+    return {
+      type: 'error',
+      errors: {
+        password: undefined,
+        password2: undefined,
+      },
+      message: 'Passwords do not match.',
+    };
+  }
+
+  try {
+    let user = await addPasswordWithAccount(
+      email,
+      validatedFields.data.password,
+    );
+
+    if (!user.success) {
+      return {
+        type: 'error',
+        errors: {
+          password: undefined,
+          password2: undefined,
+        },
+        message: user.message || 'Failed to reset password.',
+      };
+    }
+
+    // delete the token
+    await deleteToken(email);
+
+    return {
+      type: 'success',
+      errors: null,
+      message: user.message || 'Password added successfully.',
+    };
+  } catch (error: any) {
+    console.error('Failed to add password.', error);
+    return {
+      type: 'error',
+      errors: {
+        password: undefined,
+        password2: undefined,
+      },
+      message: error.message || 'Failed to add password.',
+    };
+  }
+}
+
+// =============================== sendAddPasswordEmail ===============================
+export async function sendAddPasswordEmail(email: string) {
+  try {
+    let emailData = await createTokenForAddPassword(email);
+
+    if (!emailData.success) {
+      return {
+        type: 'error',
+        message: emailData.message || 'Failed to send email. Please try again.',
+      };
+    }
+
+    return {
+      type: 'success',
+      message: 'Please check your email for next step',
+    };
+  } catch (error: any) {
+    console.error('Failed to send email', error);
+    return {
+      type: 'error',
+      message: error.message || 'Failed to send email.',
     };
   }
 }
