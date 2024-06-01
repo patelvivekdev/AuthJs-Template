@@ -111,9 +111,9 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 {accounts?.includes('google') ? (
-                  <UnlinkAccountButton />
+                  <UnlinkAccountButton userId={user?.id!} provider='google' />
                 ) : (
-                  <LinkAccountButton />
+                  <LinkAccountButton provider='google' />
                 )}
               </div>
               <div className='flex items-center justify-between'>
@@ -129,9 +129,9 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 {accounts?.includes('github') ? (
-                  <UnlinkAccountButton />
+                  <UnlinkAccountButton userId={user?.id!} provider='github' />
                 ) : (
-                  <LinkAccountButton />
+                  <LinkAccountButton provider='github' />
                 )}
               </div>
               {/* <div className='flex items-center justify-between'>

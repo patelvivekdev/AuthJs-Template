@@ -16,29 +16,53 @@ export const createTokenForCreateUser = async (email: string) => {
   const existingUser = await db
     .select()
     .from(users)
-    .where(eq(users.email, email.trim()));
+    .leftJoin(accounts, eq(accounts.userId, users.id))
+    .where(and(eq(users.email, email.trim()), eq(accounts.type, 'email')))
+    .groupBy(users.id);
 
-  // check if user is sign up with oauth
   if (existingUser.length > 0) {
-    const existingOAuthAccount = await db
-      .select()
-      .from(accounts)
-      .where(
-        and(
-          eq(accounts.userId, existingUser[0].id),
-          or(eq(accounts.type, 'oauth'), eq(accounts.type, 'oidc')),
-        ),
-      );
-
-    if (existingOAuthAccount.length > 0) {
-      throw new Error(
-        'It looks like you already have an account with Oauth provider.',
-      );
-    } else {
-      throw new Error('Email already taken!');
-    }
+    throw new Error('Email already taken!');
   }
 
+  // check if user already has an account with Oauth provider
+  const existingOAuthAccount = await db
+    .select()
+    .from(users)
+    .leftJoin(accounts, eq(accounts.userId, users.id))
+    .where(
+      and(
+        eq(users.email, email.trim()),
+        or(eq(accounts.type, 'oauth'), eq(accounts.type, 'oidc')),
+      ),
+    )
+    .groupBy(users.id);
+
+  console.log('existingOAuthAccount', existingOAuthAccount);
+
+  if (existingOAuthAccount.length > 0) {
+    // throw new Error(
+    //   'It looks like you already have an account with Oauth provider.',
+    // );
+
+    // Send user message to link their Oauth account to their account
+    const baseUrl = process.env.BASE_URL
+      ? `${process.env.BASE_URL}`
+      : 'http://localhost:3000';
+
+    await db
+      .insert(verificationTokens)
+      .values({ identifier: email, token, expires })
+      .returning();
+
+    let addPasswordLink = `${baseUrl}/add-password?token=${token}`;
+    let emailData = await sendAddPasswordEmail(
+      email,
+      existingOAuthAccount[0].user.name!,
+      addPasswordLink,
+      5,
+    );
+    return emailData;
+  }
   await db
     .insert(verificationTokens)
     .values({ identifier: email, token, expires })

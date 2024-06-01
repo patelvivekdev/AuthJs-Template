@@ -10,11 +10,32 @@ import {
   createUser,
   deleteUser,
   savePassword,
+  deleteUserAccount,
 } from '@/db/query/User';
 import { z } from 'zod';
 import { signIn as signInUser, signOut } from '@/auth';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+
+// =============================== Oauth Login ===============================
+export async function oAuthLogin(provider: string) {
+  try {
+    const user = await signInUser(provider, {
+      redirect: false,
+    });
+    console.log('user', user);
+  } catch (error: any) {
+    console.error('Failed to login', error);
+  }
+
+  // if (user) redirect(user);
+}
+
+// =============================== Oauth Remove ===============================
+export async function oAuthRemove(userId: string, provider: string) {
+  await deleteUserAccount(userId, provider);
+  revalidatePath('/', 'layout');
+}
 
 // =============================== signUp ===============================
 const signUpSchema = z.object({
@@ -31,6 +52,7 @@ export async function signUp(prevState: any, formData: FormData) {
       type: 'error',
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields!!',
+      resetKey: '',
     };
   }
 
@@ -44,6 +66,7 @@ export async function signUp(prevState: any, formData: FormData) {
           email: undefined,
         },
         message: 'Failed to signUp.',
+        resetKey: '',
       };
     }
 
@@ -51,6 +74,7 @@ export async function signUp(prevState: any, formData: FormData) {
       type: 'success',
       errors: null,
       message: 'Please check your email for next step',
+      resetKey: Date.now().toString(),
     };
   } catch (error: any) {
     console.error('Failed to signUp', error);
@@ -60,6 +84,7 @@ export async function signUp(prevState: any, formData: FormData) {
         email: undefined,
       },
       message: error.message || 'Failed to signUp.',
+      resetKey: '',
     };
   }
 }

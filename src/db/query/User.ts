@@ -1,6 +1,6 @@
 import { db } from '..';
 import { users, accounts, InsertAccounts } from '../schema';
-import { eq, or } from 'drizzle-orm';
+import { eq, or, and } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
 export const loginUser = async (username: string) => {
@@ -186,4 +186,11 @@ export async function linkAccountToUser(
 // Delete user
 export async function deleteUser(userId: string) {
   await db.delete(users).where(eq(users.id, userId));
+}
+
+// Delete account
+export async function deleteUserAccount(userId: string, provider: string) {
+  await db
+    .delete(accounts)
+    .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)));
 }

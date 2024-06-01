@@ -1,42 +1,15 @@
-// // components/LinkAccountButton.tsx
-// import React from 'react';
-
+import { oAuthLogin } from '@/actions/authAction';
 import { Button } from '@/components/ui/button';
 
-export default function LinkAccountButton() {
+export default function LinkAccountButton({ provider }: { provider: string }) {
+  // const [state, submitAction, isPending] = useActionState(deleteAccount, initialState);
+  const action = oAuthLogin.bind(null, provider as string);
+
   return (
-    <Button size='sm' variant='outline'>
-      Connect
-    </Button>
+    <form action={action}>
+      <Button size='sm' variant='outline'>
+        Connect
+      </Button>
+    </form>
   );
 }
-
-// interface LinkAccountButtonProps {
-//   userId: string;
-//   accountData: AdapterAccount;
-// }
-
-// const LinkAccountButton: React.FC<LinkAccountButtonProps> = ({
-//   userId,
-//   accountData,
-// }) => {
-//   const handleLink = async () => {
-//     const response = await fetch('/api/auth/link-account', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ userId, accountData }),
-//     });
-
-//     if (response.ok) {
-//       alert('Account linked successfully');
-//     } else {
-//       alert('Error linking account');
-//     }
-//   };
-
-//   return <button onClick={handleLink}>Link Account</button>;
-// };
-
-// export default LinkAccountButton;
