@@ -46,7 +46,7 @@ export default function DeleteAccount({ userId }: { userId: string }) {
               </Button>
             </DialogClose>
             <form action={deleteAccountWithEmail}>
-              <SubmitButton name='Delete Account' />
+              <SubmitButton>Delete Account</SubmitButton>
             </form>
           </DialogFooter>
         </DialogContent>

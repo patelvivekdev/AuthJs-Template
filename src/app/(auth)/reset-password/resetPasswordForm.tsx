@@ -97,7 +97,7 @@ export default function ResetPasswordForm({ email }: { email: string }) {
           <p className='text-red-500'>{state.errors.password2}</p>
         )}
       </div>
-      <SubmitButton name='Save Password' />
+      <SubmitButton>Save Password</SubmitButton>
     </form>
   );
 }

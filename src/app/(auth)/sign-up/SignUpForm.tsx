@@ -43,7 +43,7 @@ export default function SignUpForm() {
       {state.errors?.email && (
         <p className='text-red-500'>{state.errors.email}</p>
       )}
-      <SubmitButton name='Sign Up' />
+      <SubmitButton>Sign Up</SubmitButton>
     </form>
   );
 }

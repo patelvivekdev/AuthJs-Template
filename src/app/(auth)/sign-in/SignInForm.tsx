@@ -74,7 +74,7 @@ export default function SignInForm() {
           <p className='text-red-500'>{state.errors.password}</p>
         )}
       </div>
-      <SubmitButton name='Sign In' />
+      <SubmitButton>Sign In</SubmitButton>
     </form>
   );
 }

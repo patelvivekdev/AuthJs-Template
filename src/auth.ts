@@ -4,7 +4,11 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import { getUserById, loginUser } from './db/query/User';
+import {
+  getUserById,
+  // getUserByProviderAccountId,
+  loginUser,
+} from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 
@@ -66,8 +70,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ account }) {
-      if (account?.provider === 'google' || account?.provider === 'facebook') {
-        // Here you can handle additional logic for linking accounts
+      if (account?.provider === 'github' || account?.provider === 'google') {
+        //   // check if user already exists with this account.providerAccountId
+        //   const existingUser = await getUserByProviderAccountId(
+        //     account?.providerAccountId as string,
+        //   );
+        //   if (existingUser) {
+        //     throw new OAuthAccountNotLinked();
+        //   } else {
+        //     return true;
+        //   }
       }
       return true;
     },
@@ -115,7 +127,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: 'jwt' },
   jwt: { encode, decode },
   secret: process.env.AUTH_SECRET,
+
   pages: {
     signIn: '/sign-in',
+    error: '/error',
   },
 });

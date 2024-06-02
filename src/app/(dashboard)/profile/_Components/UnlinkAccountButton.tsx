@@ -1,5 +1,5 @@
 import { oAuthRemove } from '@/actions/authAction';
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/SubmitButton';
 
 export default function UnlinkAccountButton({
   userId,
@@ -12,9 +12,9 @@ export default function UnlinkAccountButton({
   const bindProvider = bindUserId.bind(null, provider as string);
   return (
     <form action={bindProvider}>
-      <Button size='sm' variant='destructive'>
+      <SubmitButton size='sm' variant='destructive'>
         Disconnect
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

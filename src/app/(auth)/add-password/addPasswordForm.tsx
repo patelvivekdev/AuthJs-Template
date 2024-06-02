@@ -94,7 +94,7 @@ export default function AddPasswordForm({ email }: { email: string }) {
           <p className='text-red-500'>{state.errors.password2}</p>
         )}
       </div>
-      <SubmitButton name='Add Password' />
+      <SubmitButton>Add Password</SubmitButton>
     </form>
   );
 }

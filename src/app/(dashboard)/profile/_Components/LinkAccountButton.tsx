@@ -1,5 +1,5 @@
 import { oAuthLogin } from '@/actions/authAction';
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/SubmitButton';
 
 export default function LinkAccountButton({ provider }: { provider: string }) {
   // const [state, submitAction, isPending] = useActionState(deleteAccount, initialState);
@@ -7,9 +7,9 @@ export default function LinkAccountButton({ provider }: { provider: string }) {
 
   return (
     <form action={action}>
-      <Button size='sm' variant='outline'>
+      <SubmitButton size='sm' variant='outline'>
         Connect
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

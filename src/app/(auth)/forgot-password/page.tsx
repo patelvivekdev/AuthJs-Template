@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
                 <p className='text-red-500'>{state.errors.email}</p>
               )}
             </div>
-            <SubmitButton name='Send an email' />
+            <SubmitButton>Send an email</SubmitButton>
           </div>
         </form>
       </div>

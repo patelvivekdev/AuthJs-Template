@@ -18,5 +18,5 @@ A template repo for starting authentication in your upcoming Next.js application
 - [ ] Username Update | Protected
 - [x] Delete Account | Protected
 - [ ] Two Factor Authentication | Public
-- [ ] Account linking | Protected
-- [ ] Account Unlinking | Protected
+- [x] Account linking | Protected
+- [x] Account Unlinking | Protected

@@ -134,7 +134,7 @@ export default function OnBoardingForm({ email }: { email: string }) {
           <p className='text-red-500'>{state.errors.password2}</p>
         )}
       </div>
-      <SubmitButton name='Sign Up' />
+      <SubmitButton>Sign Up</SubmitButton>
     </form>
   );
 }

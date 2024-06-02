@@ -19,16 +19,12 @@ import { revalidatePath } from 'next/cache';
 
 // =============================== Oauth Login ===============================
 export async function oAuthLogin(provider: string) {
-  try {
-    const user = await signInUser(provider, {
-      redirect: false,
-    });
-    console.log('user', user);
-  } catch (error: any) {
-    console.error('Failed to login', error);
-  }
+  let user = '/';
+  user = await signInUser(provider, {
+    redirect: true,
+  });
 
-  // if (user) redirect(user);
+  if (user) redirect(user);
 }
 
 // =============================== Oauth Remove ===============================
