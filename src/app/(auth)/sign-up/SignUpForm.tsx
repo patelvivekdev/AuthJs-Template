@@ -1,6 +1,6 @@
 'use client';
 // import { useActionState } from 'react';
-import { signUp } from '@/actions/authAction';
+import { signUp } from '@/actions/auth';
 import { useFormState } from 'react-dom';
 import { SubmitButton } from '@/components/SubmitButton';
 import { Label } from '@/components/ui/label';

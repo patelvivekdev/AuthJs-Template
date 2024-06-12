@@ -4,11 +4,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import {
-  getUserById,
-  // getUserByProviderAccountId,
-  loginUser,
-} from './db/query/User';
+import { getUserById, loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 
@@ -69,18 +65,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ account }) {
-      if (account?.provider === 'github' || account?.provider === 'google') {
-        //   // check if user already exists with this account.providerAccountId
-        //   const existingUser = await getUserByProviderAccountId(
-        //     account?.providerAccountId as string,
-        //   );
-        //   if (existingUser) {
-        //     throw new OAuthAccountNotLinked();
-        //   } else {
-        //     return true;
-        //   }
-      }
+    async signIn({ user, account, profile }) {
+      console.log('user', user);
+      console.log('account', account);
+      console.log('profile', profile);
+      // if (account?.provider === 'github' || account?.provider === 'google') {
+      //   // check if user already exists with this account.providerAccountId
+      //   const existingUser = await getUserByProviderAccountId(
+      //     account?.providerAccountId as string,
+      //   );
+      //   if (existingUser) {
+      //     throw new OAuthAccountNotLinked();
+      //   } else {
+      //     return true;
+      //   }
+      // }
       return true;
     },
     authorized({ auth, request: { nextUrl } }) {

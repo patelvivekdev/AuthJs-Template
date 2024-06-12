@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
 import toast from 'react-hot-toast';
 import { SubmitButton } from '@/components/SubmitButton';
-import { sendAddPasswordEmail } from '@/actions/authAction';
+import { sendAddPasswordEmail } from '@/actions/auth';
 
 const initialState = {
   type: '',
