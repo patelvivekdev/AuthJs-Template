@@ -1,63 +1,35 @@
-'use client';
-// import { useActionState } from 'react';
-// import { useRouter } from 'next/navigation';
-import { signUp } from '@/actions/authAction';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
-import { SubmitButton } from '@/components/SubmitButton';
+import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
+import SignUpForm from './SignUpForm';
 
-const initialState = {
-  message: '',
-  errors: null,
-};
-
-export default function SignUpForm() {
-  // const [state, submitAction, isPending] = useActionState(signUp, initialState);
-
-  const [state, submitAction] = useFormState(signUp, initialState);
-
-  // const router = useRouter();
-
+export default function SignUp() {
   return (
-    <div className='flex min-h-screen items-center justify-center bg-gray-500 '>
-      <div className='w-full max-w-md space-y-8 rounded-lg bg-gray-800 p-8 shadow-xl'>
+    <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
+      <div className='m-4 mx-auto flex flex-col gap-2 rounded-lg p-8 shadow-lg shadow-black dark:shadow-white'>
         <div className='text-center'>
           <h1 className='mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl'>
-            Join True Feedback
+            Create an account
           </h1>
-          <p className='mb-4'>Sign up to start your anonymous adventure</p>
+          <p className='text-sm text-gray-500 dark:text-gray-400'>
+            Enter your email below to create your account
+          </p>
         </div>
-        <form action={submitAction} className='space-y-6'>
-          {state.errors && <p className='text-red-500'>{state.errors}</p>}
-          <label htmlFor='username' className='sr-only'>
-            Username
-          </label>
-          <input
-            type='text'
-            name='username'
-            id='username'
-            className='w-full rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500'
-            placeholder='Username'
-          />
-          <label htmlFor='password' className='sr-only'>
-            Password
-          </label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            className='w-full rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500'
-            placeholder='Password'
-          />
-          <SubmitButton name='Sign Up' />
-        </form>
-        <div className='mt-4 text-center'>
-          <p>
-            Already a member?{' '}
-            <Link href='/sign-in' className='text-blue-600 hover:text-blue-800'>
+        <SignUpForm />
+        <div className='px-2 text-center'>Or continue with</div>
+        <div className='flex items-center justify-center space-x-4'>
+          <GithubSignIn />
+          <GoogleSignIn />
+        </div>
+        <div className='mt-6 flex items-center justify-between'>
+          <div className='text-sm text-gray-500 dark:text-gray-400'>
+            Already have an account ?{' '}
+            <Link
+              className='font-medium text-blue-500 hover:underline'
+              href='/sign-in'
+            >
               Sign in
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>

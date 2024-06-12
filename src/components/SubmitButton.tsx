@@ -1,17 +1,36 @@
 'use client';
 
+import React from 'react';
 import { useFormStatus } from 'react-dom';
+import { Button } from './ui/button';
 
-export function SubmitButton({ name }: { name: string }) {
+export function SubmitButton({
+  variant,
+  size,
+  children,
+}: {
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | null;
+  size?: 'sm' | 'default' | 'lg' | 'icon' | null;
+  children: React.ReactNode;
+}) {
   const { pending } = useFormStatus();
 
   return (
-    <button
+    <Button
       type='submit'
-      className='w-full rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+      size={size}
+      variant={variant}
+      className='w-full'
       disabled={pending}
     >
-      {pending ? 'Submitting...' : name}
-    </button>
+      {pending ? 'Submitting...' : children}
+    </Button>
   );
 }
