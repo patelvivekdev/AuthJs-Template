@@ -2,22 +2,22 @@
 
 import { signIn } from '@/auth';
 import { redirect } from 'next/navigation';
-
+import { OAuthAccountNotLinked } from '@auth/core/errors';
 import { deleteUserAccount } from '@/db/query/User';
 import { revalidatePath } from 'next/cache';
 
 // =============================== Oauth Login ===============================
 export async function oAuthLogin(provider: string) {
-  let user = '/';
   try {
-    user = await signIn(provider, { redirect: false });
-    console.log('user', user);
+    await signIn(provider);
   } catch (error) {
-    console.log('error', error);
+    console.log('Error------', error);
+    if (error instanceof OAuthAccountNotLinked) {
+      redirect('/error?error=OAuthAccountNotLinked');
+    } else {
+      throw error;
+    }
   }
-  // console.log(user);
-
-  if (user) redirect(user);
 }
 
 // =============================== Oauth Remove ===============================

@@ -1,8 +1,25 @@
 import Link from 'next/link';
 import SignInForm from './SignInForm';
 import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
 
-export default function SignIn() {
+export default async function SignIn({
+  searchParams,
+}: {
+  searchParams?: {
+    error?: string;
+  };
+}) {
+  const error = searchParams?.error || '';
+  if (error) {
+    redirect(`/error?error=${error}`);
+  }
+  const session = await auth();
+  const user = session?.user;
+  if (user) {
+    redirect('/profile');
+  }
   return (
     <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
       <div className='mx-auto flex flex-col gap-2 rounded-lg p-8 shadow-lg shadow-black dark:shadow-white'>
