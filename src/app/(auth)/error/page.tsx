@@ -8,6 +8,7 @@ enum Error {
   Configuration = 'Configuration',
   AccessDenied = 'AccessDenied',
   Verification = 'Verification',
+  OAuthAccountNotLinked = 'OAuthAccountNotLinked',
   Default = 'Default',
 }
 
@@ -22,12 +23,28 @@ const errorMap = {
   [Error.AccessDenied]: (
     <div className='flex flex-col items-center justify-center gap-4'>
       <h2 className='text-xl font-bold'>
-        Oauth Account is already linked to another account.
+        You are not authorized to access this page.
       </h2>
       <p>
         Unique error code:{' '}
         <code className='rounded-sm bg-slate-100 p-1 text-xs'>
           AccessDenied
+        </code>
+      </p>
+      <Link className='text-blue-500' href='/'>
+        Go to Home
+      </Link>
+    </div>
+  ),
+  [Error.OAuthAccountNotLinked]: (
+    <div className='flex flex-col items-center justify-center gap-4'>
+      <h2 className='text-xl font-bold'>
+        Oauth Account is already linked to another account.
+      </h2>
+      <p>
+        Unique error code:{' '}
+        <code className='rounded-sm bg-slate-100 p-1 text-xs'>
+          OAuthAccountNotLinked
         </code>
       </p>
       <Link className='text-blue-500' href='/profile'>
