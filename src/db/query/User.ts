@@ -39,17 +39,17 @@ export const getUserById = async (id: string) => {
   return result;
 };
 
-export const getUserByProviderAccountId = async (id: string) => {
-  const result = await db.query.accounts.findFirst({
-    where: (accounts: { providerAccountId: any }, { eq }: any) =>
-      eq(accounts.providerAccountId, id),
-    columns: {
-      // Include only fields you want from users table, excluding password
-      userId: true,
-    },
-  });
-  return result;
-};
+// export const getUserByProviderAccountId = async (id: string) => {
+//   const result = await db.query.accounts.findFirst({
+//     where: (accounts: { providerAccountId: any }, { eq }: any) =>
+//       eq(accounts.providerAccountId, id),
+//     columns: {
+//       // Include only fields you want from users table, excluding password
+//       userId: true,
+//     },
+//   });
+//   return result;
+// };
 
 export const createUser = async (
   name: string,

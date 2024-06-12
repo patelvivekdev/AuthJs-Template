@@ -1,18 +1,12 @@
 import NextAuth, { AuthError } from 'next-auth';
-// import { OAuthAccountNotLinked } from '@auth/core/errors';
 import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import {
-  getUserById,
-  getUserByProviderAccountId,
-  loginUser,
-} from './db/query/User';
+import { getUserById, loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
-import { cookies } from 'next/headers';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -71,27 +65,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ account }) {
-      const cookieStore = cookies();
-      const session = cookieStore.has('authjs.session-token');
-      // If not logged in, let user login
-      if (!session) {
-        return true;
-      }
-      // If already logged in, and try to connect another account, throw error if already linked
-      if (account?.provider === 'github' || account?.provider === 'google') {
-        // check if user already exists with this account.providerAccountId
-        const existingUser = await getUserByProviderAccountId(
-          account?.providerAccountId as string,
-        );
-        if (existingUser) {
-          return '/error?error=OAuthAccountNotLinked';
-        } else {
-          return true;
-        }
-      }
-      return true;
-    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const paths = ['/profile', '/dashboard'];
@@ -99,7 +72,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         nextUrl.pathname.startsWith(path),
       );
 
-      const publicPath = ['/sign-in', '/sign-up'];
+      const publicPath = ['/sign-up'];
       const isPublic = publicPath.some((path) =>
         nextUrl.pathname.startsWith(path),
       );
