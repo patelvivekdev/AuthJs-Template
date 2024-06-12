@@ -1,5 +1,5 @@
 import NextAuth, { AuthError } from 'next-auth';
-import { OAuthAccountNotLinked } from '@auth/core/errors';
+// import { OAuthAccountNotLinked } from '@auth/core/errors';
 import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
@@ -85,7 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           account?.providerAccountId as string,
         );
         if (existingUser) {
-          throw new OAuthAccountNotLinked('OAuth account is already linked');
+          return '/error?error=OAuthAccountNotLinked';
         } else {
           return true;
         }
