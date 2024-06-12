@@ -12,7 +12,7 @@ export const createTokenForCreateUser = async (email: string) => {
   let expires = new Date();
   expires.setMinutes(expires.getMinutes() + 5);
 
-  // check if email is already taken
+  // check if email is already taken (account type as email)
   const existingUser = await db
     .select()
     .from(users)
@@ -24,7 +24,7 @@ export const createTokenForCreateUser = async (email: string) => {
     throw new Error('Email already taken!');
   }
 
-  // check if user already has an account with Oauth provider
+  // check if user already has an account with Oauth provider (check account type as oauth or oidc)
   const existingOAuthAccount = await db
     .select()
     .from(users)
@@ -37,13 +37,7 @@ export const createTokenForCreateUser = async (email: string) => {
     )
     .groupBy(users.id);
 
-  console.log('existingOAuthAccount', existingOAuthAccount);
-
   if (existingOAuthAccount.length > 0) {
-    // throw new Error(
-    //   'It looks like you already have an account with Oauth provider.',
-    // );
-
     // Send user message to link their Oauth account to their account
     const baseUrl = process.env.BASE_URL
       ? `${process.env.BASE_URL}`
@@ -63,12 +57,14 @@ export const createTokenForCreateUser = async (email: string) => {
     );
     return emailData;
   }
+
   await db
     .insert(verificationTokens)
     .values({ identifier: email, token, expires })
     .returning();
 
   let emailData = await sendVerificationEmail(email, token, 5);
+
   return emailData;
 };
 

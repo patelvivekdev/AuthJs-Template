@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 'use client';
 
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 enum Error {
@@ -19,11 +20,20 @@ const errorMap = {
     </p>
   ),
   [Error.AccessDenied]: (
-    <p>
-      Access denied. Please contact us if this error persists. Unique error
-      code:{' '}
-      <code className='rounded-sm bg-slate-100 p-1 text-xs'>AccessDenied</code>
-    </p>
+    <div className='flex flex-col items-center justify-center gap-4'>
+      <h2 className='text-xl font-bold'>
+        Oauth Account is already linked to another account.
+      </h2>
+      <p>
+        Unique error code:{' '}
+        <code className='rounded-sm bg-slate-100 p-1 text-xs'>
+          AccessDenied
+        </code>
+      </p>
+      <Link className='text-blue-500' href='/profile'>
+        Go to Profile
+      </Link>
+    </div>
   ),
   [Error.Verification]: (
     <p>
@@ -47,18 +57,14 @@ export default function AuthErrorPage() {
 
   return (
     <div className='flex h-screen w-full flex-col items-center justify-center'>
-      <a
-        href='#'
-        className='block max-w-sm rounded-lg border border-gray-200 bg-white p-6 text-center shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'
-      >
-        <h5 className='mb-2 flex flex-row items-center justify-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
+      <div className='block max-w-sm rounded-lg border border-gray-200 bg-white p-6 text-center shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'>
+        {/* <h5 className='mb-2 flex flex-row items-center justify-center gap-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
           Something went wrong
-        </h5>
+        </h5> */}
         <div className='font-normal text-gray-700 dark:text-gray-400'>
           {errorMap[error] || 'Please contact us if this error persists.'}
         </div>
-      </a>
-      <div></div>
+      </div>
     </div>
   );
 }

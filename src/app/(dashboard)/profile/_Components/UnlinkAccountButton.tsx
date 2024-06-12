@@ -1,4 +1,4 @@
-import { oAuthRemove } from '@/actions/authAction';
+import { oAuthRemove } from '@/actions/auth';
 import { SubmitButton } from '@/components/SubmitButton';
 
 export default function UnlinkAccountButton({

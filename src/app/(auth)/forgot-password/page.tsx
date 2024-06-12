@@ -6,7 +6,7 @@ import { useFormState } from 'react-dom';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/SubmitButton';
-import { forgotPassword } from '@/actions/authAction';
+import { forgotPassword } from '@/actions/auth';
 import toast from 'react-hot-toast';
 
 const initialState = {

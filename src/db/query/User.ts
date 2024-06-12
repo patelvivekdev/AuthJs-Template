@@ -1,5 +1,5 @@
 import { db } from '..';
-import { users, accounts, InsertAccounts } from '../schema';
+import { users, accounts } from '../schema';
 import { eq, or, and } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
@@ -17,7 +17,7 @@ export const loginUser = async (username: string) => {
 
 export const getUserById = async (id: string) => {
   const result = await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.id, id),
+    where: (users: { id: any }, { eq }: any) => eq(users.id, id),
     columns: {
       // Include only fields you want from users table, excluding password
       id: true,
@@ -41,7 +41,8 @@ export const getUserById = async (id: string) => {
 
 export const getUserByProviderAccountId = async (id: string) => {
   const result = await db.query.accounts.findFirst({
-    where: (accounts, { eq }) => eq(accounts.providerAccountId, id),
+    where: (accounts: { providerAccountId: any }, { eq }: any) =>
+      eq(accounts.providerAccountId, id),
     columns: {
       // Include only fields you want from users table, excluding password
       userId: true,
@@ -172,26 +173,6 @@ export async function getAdapterUser(email: string) {
     .limit(1);
 
   return user;
-}
-
-// Function to link account to user
-export async function linkAccountToUser(
-  userId: string,
-  accountData: InsertAccounts,
-) {
-  await db.insert(accounts).values({
-    userId,
-    type: accountData.type,
-    provider: accountData.provider,
-    providerAccountId: accountData.providerAccountId,
-    access_token: accountData.access_token,
-    refresh_token: accountData.refresh_token,
-    expires_at: accountData.expires_at,
-    token_type: accountData.token_type,
-    scope: accountData.scope,
-    id_token: accountData.id_token,
-    session_state: accountData.session_state,
-  });
 }
 
 // Delete user

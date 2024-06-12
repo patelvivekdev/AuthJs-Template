@@ -1,5 +1,5 @@
 // import { useActionState } from 'react';
-import { deleteAccount } from '@/actions/authAction';
+import { deleteAccount } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

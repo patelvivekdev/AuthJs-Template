@@ -1,7 +1,7 @@
 'use client';
 // import { useActionState } from 'react';
 import { useState } from 'react';
-import { signIn } from '@/actions/authAction';
+import { signIn } from '@/actions/auth';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { SubmitButton } from '@/components/SubmitButton';

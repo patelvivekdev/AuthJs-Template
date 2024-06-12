@@ -2,7 +2,7 @@
 // import { useActionState } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { resetPassword } from '@/actions/authAction';
+import { resetPassword } from '@/actions/auth';
 import { useFormState } from 'react-dom';
 import { SubmitButton } from '@/components/SubmitButton';
 import { useEffect } from 'react';

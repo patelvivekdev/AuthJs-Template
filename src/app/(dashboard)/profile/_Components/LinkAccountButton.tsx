@@ -1,4 +1,4 @@
-import { oAuthLogin } from '@/actions/authAction';
+import { oAuthLogin } from '@/actions/auth';
 import { SubmitButton } from '@/components/SubmitButton';
 
 export default function LinkAccountButton({ provider }: { provider: string }) {
