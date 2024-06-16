@@ -41,12 +41,29 @@ A template repo for starting authentication in your upcoming Next.js application
 - [ ] Permission 
 
 ## Database sessions
-- [ ] Database sessions
+- [x] Database sessions checkout [db-session](https://github.com/patelvivekdev/drizzle-next-auth-turso/tree/db-session)
 
 
 ## Links
-
+- [Live Link JWT Sessions](https://drizzle-next-auth-turso.vercel.app)
+- [Live Link DB Sessions](https://drizzle-next-auth-turso-db-sessions.vercel.app)
 - [AuthJS](https://authjs.dev/)
 - [Drizzle](https://drizzle.team/)
 - [Turso](https://turso.dev/)
 - [NextJs](https://nextjs.org/)
+
+
+## Open In IDX
+
+<a href="https://idx.google.com/import?url=https://github.com/patelvivekdev/drizzle-next-auth-turso">
+  <img height="32" alt="Open in IDX" src="https://cdn.idx.dev/btn/open_dark_32@2x.png">
+</a>
+
+<div align="center">
+  <div align="center">
+    <img src="https://img.shields.io/github/stars/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Stars" />
+    <img src="https://img.shields.io/github/forks/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Forks" />
+    <img src="https://img.shields.io/github/issues/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Issues" />
+  </div>
+    Made with ❤️ by Vivek Patel
+</div>
