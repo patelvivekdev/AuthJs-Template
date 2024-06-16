@@ -6,7 +6,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
 import { getUserById, loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
-import { encode, decode } from 'next-auth/jwt';
+import { sessions } from '@/db/schema';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -90,7 +90,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt: async ({ token }) => {
       const user = await getUserById(token.sub!);
       if (user) {
-        token.user = user;
+        // Create session in database with this userId
+        let sessionToken = crypto.randomUUID();
+        let expiry = new Date();
+        // 10 Days
+        expiry.setDate(expiry.getDate() + 10);
+
+        let sessionData = await db
+          .insert(sessions)
+          .values({ sessionToken, userId: user.id, expires: expiry })
+          .returning();
+
+        token.sessionToken = sessionData[0].sessionToken;
+
         return token;
       } else {
         return null;
@@ -106,8 +118,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-  session: { strategy: 'jwt' },
-  jwt: { encode, decode },
+  session: { strategy: 'database' },
+  jwt: {
+    async encode({ token }) {
+      return token?.sessionToken as unknown as string;
+    },
+    async decode() {
+      return null;
+    },
+  },
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/sign-in',

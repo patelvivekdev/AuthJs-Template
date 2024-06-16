@@ -11,10 +11,10 @@ export async function oAuthLogin(provider: string) {
   try {
     await signIn(provider);
   } catch (error) {
-    console.log('Error------', error);
     if (error instanceof OAuthAccountNotLinked) {
       redirect('/error?error=OAuthAccountNotLinked');
     } else {
+      // for Redirect to work
       throw error;
     }
   }
