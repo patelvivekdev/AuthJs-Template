@@ -41,11 +41,12 @@ A template repo for starting authentication in your upcoming Next.js application
 - [ ] Permission 
 
 ## Database sessions
-- [ ] Database sessions
+- [x] Database sessions checkout [db-session](https://github.com/patelvivekdev/drizzle-next-auth-turso/tree/db-session)
 
 
 ## Links
-
+- [Live Link JWT Sessions](https://drizzle-next-auth-turso.vercel.app)
+- [Live Link DB Sessions](https://drizzle-next-auth-turso-db-sessions.vercel.app)
 - [AuthJS](https://authjs.dev/)
 - [Drizzle](https://drizzle.team/)
 - [Turso](https://turso.dev/)
