@@ -16,6 +16,7 @@ export const users = sqliteTable('user', {
   username: text('username'),
   password: text('password'),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
+  role: text('role').default('USER'),
   image: text('image'),
 });
 

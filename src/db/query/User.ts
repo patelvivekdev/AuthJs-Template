@@ -25,6 +25,7 @@ export const getUserById = async (id: string) => {
       email: true,
       username: true,
       emailVerified: true,
+      role: true,
       image: true,
     },
     with: {
@@ -140,7 +141,7 @@ export const addPasswordWithAccount = async (
   try {
     const user = await db
       .update(users)
-      .set({ username: email, password: hashedPassword })
+      .set({ password: hashedPassword })
       .where(eq(users.email, email))
       .returning();
 

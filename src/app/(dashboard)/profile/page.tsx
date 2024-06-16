@@ -19,10 +19,17 @@ import UnlinkAccountButton from './_Components/UnlinkAccountButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Edit } from 'lucide-react';
 import AddPasswordButton from './_Components/AddPasswordButton';
+import { User as DefaultUser } from 'next-auth';
+
+// Extend User interface
+interface User extends DefaultUser {
+  role: string;
+  username: string;
+}
 
 export default async function Dashboard() {
   const session = await auth();
-  const user = session?.user;
+  const user = session?.user as User;
   if (!user) {
     redirect('/sign-in');
   }
@@ -64,6 +71,15 @@ export default async function Dashboard() {
                   defaultValue={user?.email ? user?.email : ''}
                   id='email'
                   type='email'
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor='role'>Role</Label>
+                <Input
+                  defaultValue={user?.role ? user?.role : ''}
+                  id='role'
+                  type='text'
                   disabled
                 />
               </div>

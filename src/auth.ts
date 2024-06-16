@@ -7,6 +7,7 @@ import { db } from '@/db';
 import { getUserById, loginUser } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
+import { users, accounts, sessions, verificationTokens } from '@/db/schema';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -14,19 +15,35 @@ class InvalidCredentialsError extends AuthError {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
   providers: [
     Google({
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          username: profile.email,
+          role: 'USER',
+        };
+      },
       allowDangerousEmailAccountLinking: true,
     }),
     Github({
       async profile(profile) {
         return {
           id: profile.id.toString(),
-          name: profile.name ?? profile.login,
+          name: profile.name,
           email: profile.email,
           image: profile.avatar_url,
           username: profile.login,
+          role: 'USER',
         };
       },
       allowDangerousEmailAccountLinking: true,
@@ -91,6 +108,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const user = await getUserById(token.sub!);
       if (user) {
         token.user = user;
+        token.role = user.role;
         return token;
       } else {
         return null;
@@ -98,6 +116,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session: async ({ session, token }) => {
       if (token) {
+        // @ts-ignore
+        session.role = token.role;
         // @ts-ignore
         session.user = token.user;
         session.user.id = token.sub!;
