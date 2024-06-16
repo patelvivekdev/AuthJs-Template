@@ -51,3 +51,19 @@ A template repo for starting authentication in your upcoming Next.js application
 - [Drizzle](https://drizzle.team/)
 - [Turso](https://turso.dev/)
 - [NextJs](https://nextjs.org/)
+
+
+## Open In IDX
+
+<a href="https://idx.google.com/import?url=https://github.com/patelvivekdev/drizzle-next-auth-turso">
+  <img height="32" alt="Open in IDX" src="https://cdn.idx.dev/btn/open_dark_32@2x.png">
+</a>
+
+<div align="center">
+  <div align="center">
+    <img src="https://img.shields.io/github/stars/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Stars" />
+    <img src="https://img.shields.io/github/forks/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Forks" />
+    <img src="https://img.shields.io/github/issues/patelvivekdev/drizzle-next-auth-turso?style=for-the-badge" alt="Issues" />
+  </div>
+    Made with ❤️ by Vivek Patel
+</div>
