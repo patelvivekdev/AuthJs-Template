@@ -68,6 +68,7 @@ const onBoardingSchema = z.object({
 
 export async function onBoarding(
   email: string,
+  isAdmin: boolean,
   prevState: any,
   formData: FormData,
 ) {
@@ -109,8 +110,8 @@ export async function onBoarding(
       email,
       validatedFields.data.username,
       validatedFields.data.password,
+      isAdmin,
     );
-
     if (user.length === 0) {
       return {
         type: 'error',

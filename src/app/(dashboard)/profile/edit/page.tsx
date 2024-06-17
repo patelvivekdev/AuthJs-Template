@@ -7,8 +7,7 @@ export default async function ProfileEditPage() {
   if (!user) {
     redirect('/sign-in');
   }
-  let userData = await getUserById(user?.id!);
-  console.log(userData);
+  await getUserById(user?.id!);
   return (
     <div>
       <h1>Profile Edit Page</h1>
