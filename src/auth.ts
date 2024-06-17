@@ -4,7 +4,7 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import { getUserById, loginUser } from './db/query/User';
+import { getUserById, getUserByUsername } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 import { users, accounts, sessions, verificationTokens } from '@/db/schema';
@@ -12,6 +12,11 @@ import { users, accounts, sessions, verificationTokens } from '@/db/schema';
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
   message = 'Invalid credentials';
+}
+
+class OauthError extends AuthError {
+  code = 'OauthError';
+  message = 'Please use Social Login to continue';
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -55,29 +60,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        try {
-          const user = await loginUser(credentials.username as string);
+        const user = await getUserByUsername(credentials.username as string);
 
-          if (user.length === 0) {
-            throw new InvalidCredentialsError();
-          }
-
-          const isValid = await bcrypt.compare(
-            credentials.password as string,
-            user[0].password!,
-          );
-
-          if (!isValid) {
-            throw new InvalidCredentialsError();
-          }
-          return user[0];
-        } catch (error: any) {
-          if (error instanceof AuthError) {
-            throw new InvalidCredentialsError(error.message);
-          } else {
-            throw error;
-          }
+        if (user.length === 0) {
+          throw new InvalidCredentialsError();
         }
+
+        if (user[0].password! === null) {
+          throw new OauthError();
+        }
+
+        const isValid = await bcrypt.compare(
+          credentials.password as string,
+          user[0].password!,
+        );
+
+        if (!isValid) {
+          throw new InvalidCredentialsError();
+        }
+        return user[0];
       },
     }),
   ],

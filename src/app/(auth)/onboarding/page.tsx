@@ -56,7 +56,7 @@ export default async function onBoarding({
             Fill these details to get started.
           </p>
         </div>
-        <OnBoardingForm email={data.data?.identifier!} />
+        <OnBoardingForm email={data.data?.identifier!} isAdmin={false} />
       </div>
     </div>
   );

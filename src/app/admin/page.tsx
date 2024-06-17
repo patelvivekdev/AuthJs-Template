@@ -5,6 +5,7 @@ import { DataTable } from './data-table';
 import { getUsers } from '@/db/query/User';
 import { User as DefaultUser } from 'next-auth';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 // Extend User interface
 interface User extends DefaultUser {
@@ -33,7 +34,9 @@ export default async function AdminPage() {
           </h2>
         </div>
         <div className='flex items-center space-x-2'>
-          <Button>Add Admin</Button>
+          <Link href='/add-admin'>
+            <Button>Add Admin</Button>
+          </Link>
         </div>
       </div>
       <DataTable columns={columns} data={users} />

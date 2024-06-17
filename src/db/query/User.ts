@@ -17,7 +17,7 @@ export async function getUsers(): Promise<TUser[]> {
   return result;
 }
 
-export const loginUser = async (username: string) => {
+export const getUserByUsername = async (username: string) => {
   // check if user is sign up with oauth
   const user = await db
     .select()
@@ -71,6 +71,7 @@ export const createUser = async (
   email: string,
   username: string,
   password: string,
+  isAdmin: boolean,
 ) => {
   // check if username is already taken
   const existingUsername = await db
@@ -84,7 +85,13 @@ export const createUser = async (
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await db
     .insert(users)
-    .values({ name, email, username, password: hashedPassword })
+    .values({
+      name,
+      email,
+      username,
+      password: hashedPassword,
+      role: isAdmin ? 'ADMIN' : 'USER',
+    })
     .returning();
 
   // create a account for the user
@@ -200,4 +207,24 @@ export async function deleteUserAccount(userId: string, provider: string) {
   await db
     .delete(accounts)
     .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)));
+}
+
+export async function changeUserToAdmin(userEmail: string) {
+  const user = await db
+    .update(users)
+    .set({ role: 'ADMIN' })
+    .where(eq(users.email, userEmail))
+    .returning();
+
+  if (user.length > 0) {
+    return {
+      success: true,
+      message: 'You are now Admin.',
+    };
+  } else {
+    return {
+      success: false,
+      message: 'Failed to upgrade as Admin',
+    };
+  }
 }
