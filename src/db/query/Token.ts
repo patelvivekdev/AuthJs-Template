@@ -4,6 +4,7 @@ import {
   sendVerificationEmail,
   sendForgotPasswordEmail,
   sendAddPasswordEmail,
+  sendAdminInviteEmail,
 } from '@/lib/Email';
 import { eq, and, or } from 'drizzle-orm';
 
@@ -172,4 +173,26 @@ export const deleteToken = async (email: string) => {
   await db
     .delete(verificationTokens)
     .where(eq(verificationTokens.identifier, email));
+};
+
+export const createTokenForAddAdmin = async (
+  email: string,
+  adminName: string,
+) => {
+  const baseUrl = process.env.BASE_URL
+    ? `${process.env.BASE_URL}`
+    : 'http://localhost:3000';
+
+  let token = crypto.randomUUID();
+  let expires = new Date();
+  expires.setMinutes(expires.getMinutes() + 5);
+
+  await db
+    .insert(verificationTokens)
+    .values({ identifier: email, token, expires })
+    .returning();
+
+  let inviteLink = `${baseUrl}/add-admin/verify?token=${token}`;
+  let emailData = await sendAdminInviteEmail(adminName, email, inviteLink, 15);
+  return emailData;
 };

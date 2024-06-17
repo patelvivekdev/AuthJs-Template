@@ -39,6 +39,15 @@ export async function signIn(prevState: any, formData: FormData) {
         },
         message: error.message,
       };
+    } else if (error.code === 'OauthError') {
+      return {
+        type: 'error',
+        errors: {
+          username: undefined,
+          password: undefined,
+        },
+        message: error.message,
+      };
     } else {
       return {
         type: 'error',
