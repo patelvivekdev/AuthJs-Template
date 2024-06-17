@@ -2,6 +2,7 @@ import { resend } from './resend';
 import VerificationEmail from '../../emails/verificationEmail';
 import ForgotPasswordEmail from '../../emails/forgotPasswordEmail';
 import AddPasswordEmail from '../../emails/addPasswordEmail';
+import InviteAdmin from '../../emails/InviteAdminEmail';
 
 export async function sendVerificationEmail(
   email: string,
@@ -75,6 +76,36 @@ export async function sendAddPasswordEmail(
     return {
       success: false,
       message: 'Failed to send password add password email.',
+    };
+  }
+}
+
+export async function sendAdminInviteEmail(
+  adminName: string,
+  invitedUserEmail: string,
+  inviteLink: string,
+  time: number,
+) {
+  try {
+    await resend.emails.send({
+      from: 'no-reply@patelvivek.dev',
+      to: invitedUserEmail,
+      subject: 'Invite Link for admin',
+      react: InviteAdmin({
+        adminName,
+        inviteLink,
+        time,
+      }),
+    });
+    return {
+      success: true,
+      message: 'Invite link sent successfully.',
+    };
+  } catch (emailError) {
+    console.error('Error sending Invite Link:', emailError);
+    return {
+      success: false,
+      message: 'Failed to send invite link.',
     };
   }
 }
