@@ -30,7 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: profile.email,
           image: profile.picture,
           username: profile.email,
-          role: 'USER',
+          role: profile.email.endsWith('@patelvivek.dev') ? 'ADMIN' : 'USER',
         };
       },
       allowDangerousEmailAccountLinking: true,
@@ -43,7 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: profile.email,
           image: profile.avatar_url,
           username: profile.login,
-          role: 'USER',
+          role: profile.email!.endsWith('@patelvivek.dev') ? 'ADMIN' : 'USER',
         };
       },
       allowDangerousEmailAccountLinking: true,

@@ -26,7 +26,9 @@ export default function AddPasswordButton({ email }: { email: string }) {
   return (
     <>
       <form action={submitAction}>
-        <SubmitButton>Add Password</SubmitButton>
+        <SubmitButton variant='outline' size='sm'>
+          Add Password
+        </SubmitButton>
       </form>
     </>
   );

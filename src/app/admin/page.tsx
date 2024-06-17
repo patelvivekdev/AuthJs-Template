@@ -1,7 +1,10 @@
-import Admin from '@/components/admin';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import { columns } from './columns';
+import { DataTable } from './data-table';
+import { getUsers } from '@/db/query/User';
 import { User as DefaultUser } from 'next-auth';
+import { Button } from '@/components/ui/button';
 
 // Extend User interface
 interface User extends DefaultUser {
@@ -19,5 +22,21 @@ export default async function AdminPage() {
     redirect('/');
   }
 
-  return <Admin />;
+  const users = await getUsers();
+
+  return (
+    <div className='container mx-auto p-10'>
+      <div className='mb-4 flex items-center justify-between space-y-2'>
+        <div>
+          <h2 className='text-2xl font-bold tracking-tight'>
+            Welcome back {user.name} !
+          </h2>
+        </div>
+        <div className='flex items-center space-x-2'>
+          <Button>Add Admin</Button>
+        </div>
+      </div>
+      <DataTable columns={columns} data={users} />
+    </div>
+  );
 }

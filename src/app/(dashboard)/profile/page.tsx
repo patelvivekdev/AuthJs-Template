@@ -75,6 +75,15 @@ export default async function Dashboard() {
                 />
               </div>
               <div>
+                <Label htmlFor='role'>Username</Label>
+                <Input
+                  defaultValue={user?.username ? user?.username : ''}
+                  id='role'
+                  type='text'
+                  disabled
+                />
+              </div>
+              <div>
                 <Label htmlFor='role'>Role</Label>
                 <Input
                   defaultValue={user?.role ? user?.role : ''}
@@ -83,37 +92,18 @@ export default async function Dashboard() {
                   disabled
                 />
               </div>
-              <div className='flex flex-row justify-center gap-2'>
-                {accounts?.includes('email') ? (
-                  <Link href='/profile/change-password'>
-                    <Button
-                      className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
-                      type='submit'
-                    >
-                      Change Password
-                    </Button>
-                  </Link>
-                ) : (
-                  <AddPasswordButton email={user?.email!} />
-                )}
-                <Link href='/profile/edit'>
-                  <Button className='w-full' type='submit'>
-                    Edit Profile
-                  </Button>
-                </Link>
-              </div>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Connected Accounts</CardTitle>
+            <CardTitle>Manage Account</CardTitle>
             <CardDescription>
               Manage your connected social media accounts.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='space-y-4'>
+            <div className='flex flex-col space-y-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>
                   <Icons.google className='mr-2 h-6 w-6' />
@@ -150,21 +140,27 @@ export default async function Dashboard() {
                   <LinkAccountButton provider='github' />
                 )}
               </div>
-              {/* <div className='flex items-center justify-between'>
-                <div className='flex items-center space-x-4'>
-                  <Icons.twitter className='mr-2 h-6 w-6 fill-current' />
-                  <div>
-                    <h3 className='text-lg font-medium'>Twitter</h3>
-                    <p className='text-gray-500 dark:text-gray-400'>
-                      Not connected
-                    </p>
-                  </div>
-                </div>
-                <Button size='sm' variant='outline'>
-                  Connect
-                </Button>
-              </div> */}
-              <DeleteAccount userId={user?.id!} />
+              <div className='mt-8 flex flex-col justify-center gap-4 border-t-4 pt-8 sm:flex-row'>
+                {accounts?.includes('email') ? (
+                  <Link href='/profile/change-password'>
+                    <Button
+                      size='sm'
+                      className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
+                      type='submit'
+                    >
+                      Change Password
+                    </Button>
+                  </Link>
+                ) : (
+                  <AddPasswordButton email={user?.email!} />
+                )}
+                <Link href='/profile/edit'>
+                  <Button size='sm' className='w-full' type='submit'>
+                    Edit Profile
+                  </Button>
+                </Link>
+                <DeleteAccount userId={user?.id!} />
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -2,6 +2,20 @@ import { db } from '..';
 import { users, accounts } from '../schema';
 import { eq, or, and } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { TUser } from '@/app/admin/columns';
+
+export async function getUsers(): Promise<TUser[]> {
+  const result = (await db.query.users.findMany({
+    columns: {
+      id: true,
+      name: true,
+      email: true,
+      username: true,
+      role: true,
+    },
+  })) as unknown as TUser[];
+  return result;
+}
 
 export const loginUser = async (username: string) => {
   // check if user is sign up with oauth

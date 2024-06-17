@@ -28,7 +28,7 @@ export default function SignInForm() {
         </div>
       )}
       <div className='grid gap-2'>
-        <Label htmlFor='username'>Username</Label>
+        <Label htmlFor='username'>Username/Email</Label>
         <Input
           id='username'
           name='username'
