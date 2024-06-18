@@ -8,6 +8,7 @@ import { getUserById, getUserByUsername } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 import { users, accounts, sessions, verificationTokens } from '@/db/schema';
+import { cookies } from 'next/headers';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -83,6 +84,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    signIn({ user, credentials }) {
+      console.log('credentials', credentials);
+      // @ts-ignore
+      if (user.isTotpEnabled) {
+        cookies().set({
+          name: 'authjs.secret',
+          // @ts-ignore
+          value: user.id!,
+          httpOnly: true,
+          path: '/',
+        });
+        return '/sign-in/two-factor';
+      }
+      return true;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const paths = ['/profile', '/dashboard'];

@@ -27,7 +27,7 @@ export async function signIn(prevState: any, formData: FormData) {
     await signInUser('credentials', {
       username: validatedFields.data.username,
       password: validatedFields.data.password,
-      redirect: false,
+      redirect: true,
     });
   } catch (error: any) {
     if (error.code === 'invalid-credentials') {

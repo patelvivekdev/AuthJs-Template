@@ -1,24 +1,18 @@
-import { auth } from '@/auth';
-import { User as DefaultUser } from 'next-auth';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import OtpForm from './otp';
 
-// Extend User interface
-interface User extends DefaultUser {
-  role: string;
-  username: string;
-  isTotpEnabled: boolean;
-}
 export default async function TwoFactorLogin() {
-  const session = await auth();
-  const user = session?.user as User;
+  const cookieStore = cookies();
+  const userId = cookieStore.get('authjs.secret');
 
-  if (!user) {
+  if (!userId) {
     redirect('/sign-in');
   }
 
   return (
-    <div>
-      <h1>Two factor enable</h1>
+    <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
+      <OtpForm />
     </div>
   );
 }
