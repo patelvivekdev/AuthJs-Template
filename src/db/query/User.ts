@@ -41,6 +41,7 @@ export const getUserById = async (id: string) => {
       emailVerified: true,
       role: true,
       image: true,
+      isTotpEnabled: true,
     },
     with: {
       accounts: {
