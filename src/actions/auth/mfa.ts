@@ -1,6 +1,6 @@
 'use server';
 
-import { deleteUserAccount } from '@/db/query/User';
+import { deleteUserAccount, enableTwoFactor } from '@/db/query/User';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { verifyTOTP } from '@epic-web/totp';
@@ -13,6 +13,7 @@ const enableMfaSchema = z.object({
 });
 export async function enableMfa(
   secret: string,
+  email: string,
   prevState: any,
   formData: FormData,
 ) {
@@ -30,7 +31,6 @@ export async function enableMfa(
 
   try {
     const isValid = verifyTOTP({ otp: validatedFields.data.otp, secret });
-    console.log('isValid', isValid);
     if (!isValid) {
       return {
         type: 'error',
@@ -41,12 +41,23 @@ export async function enableMfa(
       };
     }
     // save to db.
+    const user = await enableTwoFactor(email, secret);
+    if (user.length > 0) {
+      return {
+        type: 'success',
+        errors: null,
+        message: 'Two-factor enabled.',
+      };
+    } else {
+      return {
+        type: 'error',
+        errors: {
+          otp: undefined,
+        },
+        message: 'Failed to enable Two-factor',
+      };
+    }
     // await signIn(email);
-    return {
-      type: 'success',
-      errors: null,
-      message: 'Password added successfully.',
-    };
   } catch (error: any) {
     console.error('Two factor authentication failed.', error);
     return {

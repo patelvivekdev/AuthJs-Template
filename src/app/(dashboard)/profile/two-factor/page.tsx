@@ -17,7 +17,7 @@ export default async function Component() {
     digits,
     algorithm,
     secret,
-    accountName: user.name!,
+    accountName: user.email!,
     issuer: 'Drizzle + Turso + Next-auth',
   });
 
@@ -47,7 +47,7 @@ export default async function Component() {
                 </p>
               </div>
             </div>
-            <TwoFactorForm secret={secret} />
+            <TwoFactorForm secret={secret} email={user.email!} />
           </div>
         </div>
       </div>

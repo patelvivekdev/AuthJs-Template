@@ -1,10 +1,14 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useFormState } from 'react-dom';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+
 import { enableMfa } from '@/actions/auth';
 import { SubmitButton } from '@/components/SubmitButton';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { useFormState } from 'react-dom';
 
 const initialState = {
   type: '',
@@ -12,10 +16,25 @@ const initialState = {
   errors: null,
 };
 
-export default function TwoFactorForm({ secret }: { secret: string }) {
+export default function TwoFactorForm({
+  secret,
+  email,
+}: {
+  secret: string;
+  email: string;
+}) {
   // const [state, submitAction, isPending] = useActionState(enableMfa, initialState);
   const actionWithSecret = enableMfa.bind(null, secret as string);
-  const [state, action] = useFormState(actionWithSecret, initialState);
+  const actionWithEmail = actionWithSecret.bind(null, email as string);
+  const [state, action] = useFormState(actionWithEmail, initialState);
+
+  const router = useRouter();
+  useEffect(() => {
+    if (state.type === 'success') {
+      toast.success(state.message);
+      router.push('/profile');
+    }
+  }, [state]);
 
   return (
     <div className='w-full space-y-2'>
@@ -24,7 +43,7 @@ export default function TwoFactorForm({ secret }: { secret: string }) {
           <p className='text-red-500'>{state.message}</p>
         </div>
       )}
-      <form action={action}>
+      <form className='flex flex-col gap-4' action={action}>
         <div className='grid gap-2'>
           <Label htmlFor='otp'>Enter your one-time password</Label>
           <Input id='otp' name='otp' type='text' placeholder='123456' />
@@ -32,9 +51,7 @@ export default function TwoFactorForm({ secret }: { secret: string }) {
             <p className='text-red-500'>{state.errors.otp}</p>
           )}
         </div>
-        <SubmitButton size='sm' variant='outline'>
-          Enable Two-Factor Authentication
-        </SubmitButton>
+        <SubmitButton size='sm'>Enable Two-Factor Authentication</SubmitButton>
       </form>
     </div>
   );

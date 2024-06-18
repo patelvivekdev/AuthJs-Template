@@ -210,6 +210,7 @@ export async function deleteUserAccount(userId: string, provider: string) {
     .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)));
 }
 
+// Change user role to ADMIN
 export async function changeUserToAdmin(userEmail: string) {
   const user = await db
     .update(users)
@@ -228,4 +229,15 @@ export async function changeUserToAdmin(userEmail: string) {
       message: 'Failed to upgrade as Admin',
     };
   }
+}
+
+// Enable Two-factor
+export async function enableTwoFactor(userEmail: string, secret: string) {
+  const user = await db
+    .update(users)
+    .set({ isTotpEnabled: true, totpSecret: secret })
+    .where(eq(users.email, userEmail))
+    .returning();
+
+  return user;
 }
