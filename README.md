@@ -43,10 +43,13 @@ A template repo for starting authentication in your upcoming Next.js application
 
 ## Role Based Access
 
-- [ ] Role Based Access | Protected
+- [x] Role Based Access | Protected
+
+> Here I used my domain to select admin user. After that admin can another admin
 
 ## User Management (Admin)
 
+- [x] Admin Dashboard
 - [ ] Permission
 
 ## Database sessions
@@ -57,10 +60,11 @@ A template repo for starting authentication in your upcoming Next.js application
 
 - [Live Link JWT Sessions](https://drizzle-next-auth-turso.vercel.app)
 - [Live Link DB Sessions](https://drizzle-next-auth-turso-db-sessions.vercel.app)
-- [AuthJS](https://authjs.dev/)
-- [Drizzle](https://drizzle.team/)
-- [Turso](https://turso.dev/)
-- [NextJs](https://nextjs.org/)
+- [AuthJS](https://authjs.dev)
+- [Drizzle](https://drizzle.team)
+- [Turso](https://turso.dev)
+- [NextJs](https://nextjs.org)
+- [patelvivek.dev](https://patelvivek.dev)
 
 ## Open In IDX
 

@@ -18,6 +18,10 @@ export const users = sqliteTable('user', {
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
   role: text('role').default('USER'),
   image: text('image'),
+  totpSecret: text('totpSecret'),
+  isTotpEnabled: integer('isTotpEnabled', { mode: 'boolean' })
+    .notNull()
+    .default(false),
 });
 
 export const accounts = sqliteTable(
