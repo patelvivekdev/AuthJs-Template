@@ -35,7 +35,9 @@ A template repo for starting authentication in your upcoming Next.js application
 
 ## Two Factor Authentication
 
-- [ ] Two Factor Authentication | Public
+- [x] Two Factor - Register with QRCode | Protected
+- [x] Two Factor - Verify after register | Protected
+- [x] Two Factor - Used After login(Oauth as well as Credentials) | Public
 
 ## Passkey/ Passwordless Login
 
