@@ -1,6 +1,9 @@
 {
-  "name": "drizzle-next-auth-turso",
-  "version": "0.1.0",
+  "name": "authjs-template",
+  "description": "A starter authentication template for Next.js",
+  "repository": "https://github.com/patelvivekdev/drizzle-next-auth-turso.git",
+  "version": "0.3.2",
+  "author": "Vivek Patel <me@patelvivek.dev>",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",

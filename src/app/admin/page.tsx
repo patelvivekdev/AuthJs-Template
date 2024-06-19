@@ -7,6 +7,13 @@ import { User as DefaultUser } from 'next-auth';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admin page',
+  description: 'Manage users',
+};
+
 // Extend User interface
 interface User extends DefaultUser {
   role: string;

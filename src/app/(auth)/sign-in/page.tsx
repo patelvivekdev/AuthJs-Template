@@ -3,6 +3,12 @@ import SignInForm from './SignInForm';
 import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Login',
+  description: 'A simple login page',
+};
 
 export default async function SignIn({
   searchParams,

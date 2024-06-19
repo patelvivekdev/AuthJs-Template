@@ -2,6 +2,13 @@ import { getVerificationToken } from '@/db/query/Token';
 import AddPasswordForm from './addPasswordForm';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Add password',
+  description: 'Add password to your account',
+};
+
 export default async function AddPasswordPage({
   searchParams,
 }: {
