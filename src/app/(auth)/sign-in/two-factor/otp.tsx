@@ -32,7 +32,7 @@ export default function OtpForm({ userId }: { userId: string }) {
       <CardHeader>
         <CardTitle>Verify your identity</CardTitle>
         <CardDescription>
-          Enter the 6-digit code sent to your phone or email to continue.
+          Enter the 6-digit code from your registered authenticator.
         </CardDescription>
       </CardHeader>
       <form action={action}>

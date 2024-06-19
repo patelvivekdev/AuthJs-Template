@@ -21,6 +21,13 @@ import { Edit, KeyRound } from 'lucide-react';
 import AddPasswordButton from './_Components/AddPasswordButton';
 import { User as DefaultUser } from 'next-auth';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+  description: 'Manage your profile',
+};
+
 // Extend User interface
 interface User extends DefaultUser {
   role: string;

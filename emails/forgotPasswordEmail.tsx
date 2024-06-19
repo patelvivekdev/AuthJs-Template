@@ -40,8 +40,8 @@ export const ForgotPasswordEmail = ({
           </Row>
           <Section>
             <Text style={text}>
-              Someone recently requested a password change for your Drizzle +
-              Turso Auth account. If this was you, you can set a new password
+              Someone recently requested a password change for your AuthJs
+              Template account. If this was you, you can set a new password
               here:
             </Text>
             <Button style={button} href={resetPasswordLink}>
@@ -63,7 +63,7 @@ export const ForgotPasswordEmail = ({
             <code style={code}>{resetPasswordLink}</code>
             <Hr style={hr} />
             <Link href={baseUrl} style={reportLink}>
-              Drizzle + Turso + Next-Auth
+              AuthJs Template
             </Link>
           </Section>
         </Container>

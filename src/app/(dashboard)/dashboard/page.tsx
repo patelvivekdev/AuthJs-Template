@@ -7,6 +7,13 @@ import {
   Card,
 } from '@/components/ui/card';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Manage your tasks',
+};
+
 export default function Dashboard() {
   return (
     <div className='container mx-auto p-12'>

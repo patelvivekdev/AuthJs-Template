@@ -2,6 +2,13 @@ import { getVerificationToken } from '@/db/query/Token';
 import ResetPasswordForm from './resetPasswordForm';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Reset Password',
+  description: 'Reset your password',
+};
+
 export default async function ResetPasswordPage({
   searchParams,
 }: {
