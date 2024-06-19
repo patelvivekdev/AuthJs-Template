@@ -4,7 +4,11 @@ import Github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
-import { getUserById, getUserByUsername } from './db/query/User';
+import {
+  getUserById,
+  getUserByUsername,
+  getUserForTotp,
+} from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
 import { users, accounts, sessions, verificationTokens } from '@/db/schema';
@@ -55,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       allowDangerousEmailAccountLinking: true,
     }),
     Credentials({
+      id: 'credentials',
       name: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
@@ -82,10 +87,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return user[0];
       },
     }),
+    Credentials({
+      id: 'TOTP',
+      name: 'TOTP',
+      credentials: {
+        userId: { label: 'userId', type: 'text' },
+        TOTP: { label: 'TOTP', type: 'text' },
+      },
+      async authorize(credentials) {
+        const user = await getUserForTotp(credentials.userId as string);
+
+        if (user.length === 0) {
+          throw new InvalidCredentialsError();
+        }
+        return user[0];
+      },
+    }),
   ],
   callbacks: {
     signIn({ user, credentials }) {
-      console.log('credentials', credentials);
+      if (credentials) {
+        // @ts-ignore
+        if (credentials.TOTP === 'TOTP') {
+          return true;
+        }
+      }
       // @ts-ignore
       if (user.isTotpEnabled) {
         cookies().set({

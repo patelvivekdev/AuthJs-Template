@@ -1,3 +1,4 @@
+'use client';
 import {
   Card,
   CardHeader,
@@ -12,9 +13,20 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/SubmitButton';
+import { useFormState } from 'react-dom';
+import { verifyTwoFactor } from '@/actions/auth';
 
-export default function OtpForm() {
+const initialState = {
+  type: '',
+  message: '',
+  errors: null,
+};
+
+export default function OtpForm({ userId }: { userId: string }) {
+  // const [state, submitAction, isPending] = useActionState(verifyTwoFactor, initialState);
+  const actionWithUserId = verifyTwoFactor.bind(null, userId as string);
+  const [state, action] = useFormState(actionWithUserId, initialState as any);
   return (
     <Card className='w-full max-w-md'>
       <CardHeader>
@@ -23,24 +35,39 @@ export default function OtpForm() {
           Enter the 6-digit code sent to your phone or email to continue.
         </CardDescription>
       </CardHeader>
-      <CardContent className='space-y-4'>
-        <div className='space-y-2'>
-          <Label htmlFor='code'>Verification Code</Label>
-          <InputOTP maxLength={6} pattern='^[0-9]+$'>
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
-          </InputOTP>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button className='w-full'>Verify Code</Button>
-      </CardFooter>
+      <form action={action}>
+        <CardContent className='space-y-4'>
+          <div className='space-y-2'>
+            {state.errors && (
+              <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
+                <p className='text-red-500'>{state.message}</p>
+              </div>
+            )}
+            <Label htmlFor='code'>Verification Code</Label>
+            <InputOTP
+              name='otp'
+              containerClassName='justify-center'
+              maxLength={6}
+              pattern='^[0-9]+$'
+            >
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+            {state.errors?.otp && (
+              <p className='text-red-500'>{state.errors.otp}</p>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <SubmitButton size='sm'>Verify Code</SubmitButton>
+        </CardFooter>
+      </form>
     </Card>
   );
 }

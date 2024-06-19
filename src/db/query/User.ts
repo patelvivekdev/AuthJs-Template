@@ -42,6 +42,7 @@ export const getUserById = async (id: string) => {
       role: true,
       image: true,
       isTotpEnabled: true,
+      totpSecret: true,
     },
     with: {
       accounts: {
@@ -241,3 +242,25 @@ export async function enableTwoFactor(userEmail: string, secret: string) {
 
   return user;
 }
+
+// Get TOTPSecret
+export const getTotpSecret = async (id: string) => {
+  const result = await db.query.users.findFirst({
+    where: (users: { id: any }, { eq }: any) => eq(users.id, id),
+    columns: {
+      // Include only fields you want from users table, excluding password
+      id: true,
+      email: true,
+      isTotpEnabled: true,
+      totpSecret: true,
+    },
+  });
+  return result;
+};
+
+export const getUserForTotp = async (username: string) => {
+  // check if user is sign up with oauth
+  let user = await db.select().from(users).where(eq(users.id, username.trim()));
+
+  return user;
+};

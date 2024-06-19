@@ -44,14 +44,10 @@ export default async function Navbar() {
         ) : (
           <div className='flex items-center space-x-4'>
             <Link href='/sign-in'>
-              <Button size='sm' variant='outline'>
-                Sign In
-              </Button>
+              <Button size='sm'>Sign In</Button>
             </Link>
             <Link href='/sign-up'>
-              <Button size='sm' variant='outline'>
-                Sign Up
-              </Button>
+              <Button size='sm'>Sign Up</Button>
             </Link>
           </div>
         )}
