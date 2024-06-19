@@ -17,7 +17,7 @@ import DeleteAccount from './_Components/DeleteAccountButton';
 import LinkAccountButton from './_Components/LinkAccountButton';
 import UnlinkAccountButton from './_Components/UnlinkAccountButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Edit } from 'lucide-react';
+import { Edit, KeyRound } from 'lucide-react';
 import AddPasswordButton from './_Components/AddPasswordButton';
 import { User as DefaultUser } from 'next-auth';
 
@@ -35,8 +35,11 @@ export default async function Dashboard() {
   }
 
   let userData = await getUserById(user?.id!);
+  if (!userData) {
+    redirect('/sign-in');
+  }
 
-  let accounts = userData?.accounts.map((account) => account.provider);
+  let accounts = userData.accounts.map((account) => account.provider);
   return (
     <div className='container mx-auto px-8 py-12'>
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
@@ -140,6 +143,25 @@ export default async function Dashboard() {
                   <LinkAccountButton provider='github' />
                 )}
               </div>
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center space-x-4'>
+                  <KeyRound className='mr-2 h-6 w-6' />
+                  <div>
+                    <h3 className='text-lg font-medium'>2FA</h3>
+                    <p className='text-gray-500 dark:text-gray-400'>
+                      {userData?.isTotpEnabled ? 'Enabled' : 'Disabled'}
+                    </p>
+                  </div>
+                </div>
+                {userData?.isTotpEnabled ? (
+                  <UnlinkAccountButton userId={user?.id!} provider='github' />
+                ) : (
+                  <Link href='/profile/two-factor'>
+                    <Button size='sm'>Enable 2FA</Button>
+                  </Link>
+                )}
+              </div>
+              <div></div>
               <div className='mt-8 flex flex-col justify-center gap-4 border-t-4 pt-8 sm:flex-row'>
                 {accounts?.includes('email') ? (
                   <Link href='/profile/change-password'>

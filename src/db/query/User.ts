@@ -41,6 +41,8 @@ export const getUserById = async (id: string) => {
       emailVerified: true,
       role: true,
       image: true,
+      isTotpEnabled: true,
+      totpSecret: true,
     },
     with: {
       accounts: {
@@ -209,6 +211,7 @@ export async function deleteUserAccount(userId: string, provider: string) {
     .where(and(eq(accounts.userId, userId), eq(accounts.provider, provider)));
 }
 
+// Change user role to ADMIN
 export async function changeUserToAdmin(userEmail: string) {
   const user = await db
     .update(users)
@@ -228,3 +231,36 @@ export async function changeUserToAdmin(userEmail: string) {
     };
   }
 }
+
+// Enable Two-factor
+export async function enableTwoFactor(userEmail: string, secret: string) {
+  const user = await db
+    .update(users)
+    .set({ isTotpEnabled: true, totpSecret: secret })
+    .where(eq(users.email, userEmail))
+    .returning();
+
+  return user;
+}
+
+// Get TOTPSecret
+export const getTotpSecret = async (id: string) => {
+  const result = await db.query.users.findFirst({
+    where: (users: { id: any }, { eq }: any) => eq(users.id, id),
+    columns: {
+      // Include only fields you want from users table, excluding password
+      id: true,
+      email: true,
+      isTotpEnabled: true,
+      totpSecret: true,
+    },
+  });
+  return result;
+};
+
+export const getUserForTotp = async (username: string) => {
+  // check if user is sign up with oauth
+  let user = await db.select().from(users).where(eq(users.id, username.trim()));
+
+  return user;
+};
