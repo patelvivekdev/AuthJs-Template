@@ -11,7 +11,13 @@ import {
 } from './db/query/User';
 import bcrypt from 'bcryptjs';
 import { encode, decode } from 'next-auth/jwt';
-import { users, accounts, sessions, verificationTokens } from '@/db/schema';
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+  authenticators,
+} from '@/db/schema';
 import { cookies } from 'next/headers';
 
 class InvalidCredentialsError extends AuthError {
@@ -25,11 +31,13 @@ class OauthError extends AuthError {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  experimental: { enableWebAuthn: true },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
+    authenticatorsTable: authenticators,
   }),
   providers: [
     Google({

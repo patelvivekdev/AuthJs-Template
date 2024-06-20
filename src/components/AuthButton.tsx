@@ -65,6 +65,22 @@ export function GoogleSignIn() {
   );
 }
 
+export function WebAuthIn() {
+  return (
+    <form
+      className='w-full'
+      action={async () => {
+        'use server';
+        await signIn('passkey');
+      }}
+    >
+      <Button className='w-full' variant='outline'>
+        Register new Passkey
+      </Button>
+    </form>
+  );
+}
+
 export function SignOut() {
   unstable_noStore();
   return (
