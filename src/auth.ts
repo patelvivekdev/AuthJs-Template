@@ -10,8 +10,15 @@ import {
   getUserForTotp,
 } from './db/query/User';
 import bcrypt from 'bcryptjs';
-import { users, accounts, sessions, verificationTokens } from '@/db/schema';
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+  authenticators,
+} from '@/db/schema';
 import { cookies } from 'next/headers';
+import Passkey from 'next-auth/providers/passkey';
 
 class InvalidCredentialsError extends AuthError {
   code = 'invalid-credentials';
@@ -24,13 +31,23 @@ class OauthError extends AuthError {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  experimental: { enableWebAuthn: true },
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
+    authenticatorsTable: authenticators,
   }),
   providers: [
+    Passkey({
+      enableConditionalUI: true,
+      getRelayingParty: () => ({
+        id: process.env.BASE_ID ? process.env.BASE_ID : '',
+        name: 'AuthJs Template',
+        origin: process.env.BASE_URL ? process.env.BASE_URL : '',
+      }),
+    }),
     Google({
       async profile(profile) {
         return {

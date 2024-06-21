@@ -5,6 +5,13 @@ import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import TwoFactorForm from './TwoFactorForm';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Register 2FA',
+  description: 'Register two factor authentication.',
+};
+
 export default async function Component() {
   const session = await auth();
   const user = session?.user;
@@ -18,7 +25,7 @@ export default async function Component() {
     algorithm,
     secret,
     accountName: user.email!,
-    issuer: 'Drizzle + Turso + Next-auth',
+    issuer: 'AuthJs Template',
   });
 
   const qrCode = await QRCode.toDataURL(otpUri);

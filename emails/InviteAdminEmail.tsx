@@ -56,7 +56,7 @@ export const InviteAdmin = ({
             <code style={code}>{inviteLink}</code>
             <Hr style={hr} />
             <Link href={baseUrl} style={reportLink}>
-              Drizzle + Turso + Next-Auth
+              AuthJs Template
             </Link>
           </Section>
         </Container>

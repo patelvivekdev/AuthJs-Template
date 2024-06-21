@@ -21,6 +21,14 @@ import { Edit, KeyRound } from 'lucide-react';
 import AddPasswordButton from './_Components/AddPasswordButton';
 import { User as DefaultUser } from 'next-auth';
 
+import type { Metadata } from 'next';
+import { WebAuthnRegister } from '@/components/WebAuthnButton';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+  description: 'Manage your profile',
+};
+
 // Extend User interface
 interface User extends DefaultUser {
   role: string;
@@ -161,7 +169,9 @@ export default async function Dashboard() {
                   </Link>
                 )}
               </div>
-              <div></div>
+              <div>
+                <WebAuthnRegister />
+              </div>
               <div className='mt-8 flex flex-col justify-center gap-4 border-t-4 pt-8 sm:flex-row'>
                 {accounts?.includes('email') ? (
                   <Link href='/profile/change-password'>

@@ -3,6 +3,13 @@ import { auth } from '@/auth';
 import { User as DefaultUser } from 'next-auth';
 import { redirect } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Add Admin',
+  description: 'Send invitation for user to register as Admin',
+};
+
 // Extend User interface
 interface User extends DefaultUser {
   role: string;

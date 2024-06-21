@@ -21,8 +21,8 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
-  title: 'Drizzle + Turso auth',
-  description: 'A Next.js + Turso + Drizzle auth boilerplate',
+  title: 'AuthJs Template',
+  description: 'A starter authentication template for Next.js',
 };
 
 export default function RootLayout({

@@ -66,7 +66,7 @@ export const AddPasswordEmail = ({
             <code style={code}>{addPasswordLink}</code>
             <Hr style={hr} />
             <Link href={baseUrl} style={reportLink}>
-              Drizzle + Turso + Next-Auth
+              AuthJs Template
             </Link>
           </Section>
         </Container>
