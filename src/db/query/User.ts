@@ -258,9 +258,9 @@ export const getTotpSecret = async (id: string) => {
   return result;
 };
 
-export const getUserForTotp = async (username: string) => {
+export const getUserForTotp = async (userId: string) => {
   // check if user is sign up with oauth
-  let user = await db.select().from(users).where(eq(users.id, username.trim()));
+  let user = await db.select().from(users).where(eq(users.id, userId.trim()));
 
   return user;
 };

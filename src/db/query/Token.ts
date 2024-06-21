@@ -5,8 +5,9 @@ import {
   sendForgotPasswordEmail,
   sendAddPasswordEmail,
   sendAdminInviteEmail,
+  sendTwoFactorVerificationEmail,
 } from '@/lib/Email';
-import { eq, and, or } from 'drizzle-orm';
+import { eq, and, or, desc } from 'drizzle-orm';
 
 export const createTokenForCreateUser = async (email: string) => {
   let token = crypto.randomUUID();
@@ -74,6 +75,27 @@ export const getVerificationToken = async (token: string) => {
     .select()
     .from(verificationTokens)
     .where(eq(verificationTokens.token, token));
+
+  if (tokenData.length > 0) {
+    return {
+      success: true,
+      data: tokenData[0],
+    };
+  } else {
+    return {
+      success: false,
+      data: null,
+    };
+  }
+};
+
+export const getVerificationTokenByUser = async (userId: string) => {
+  let tokenData = await db
+    .select()
+    .from(verificationTokens)
+    .where(eq(verificationTokens.identifier, userId))
+    .orderBy(desc(verificationTokens.createdAt))
+    .limit(1);
 
   if (tokenData.length > 0) {
     return {
@@ -194,5 +216,36 @@ export const createTokenForAddAdmin = async (
 
   let inviteLink = `${baseUrl}/add-admin/verify?token=${token}`;
   let emailData = await sendAdminInviteEmail(adminName, email, inviteLink, 15);
+  return emailData;
+};
+
+export const createOtpForVerifyUserWithEmail = async (userID: string) => {
+  // check if user exists with email and account provider as email
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, userID));
+
+  if (existingUser.length === 0) {
+    return { success: false, message: 'User not found!' };
+  }
+  const user = existingUser[0];
+
+  let OTP = String(Math.floor(100000 + Math.random() * 900000));
+
+  let expires = new Date();
+  expires.setMinutes(expires.getMinutes() + 10);
+
+  await db
+    .insert(verificationTokens)
+    .values({ identifier: userID, token: OTP, expires })
+    .returning();
+
+  let emailData = await sendTwoFactorVerificationEmail(
+    user.email,
+    user.name!,
+    OTP,
+    10,
+  );
   return emailData;
 };
