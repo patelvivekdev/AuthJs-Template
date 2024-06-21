@@ -13,6 +13,7 @@ import { verifyTOTP } from '@epic-web/totp';
 import { cookies } from 'next/headers';
 import {
   createOtpForVerifyUserWithEmail,
+  deleteToken,
   getVerificationTokenByUser,
 } from '@/db/query/Token';
 
@@ -236,6 +237,9 @@ export async function verifyEmailTwoFactor(
     if (user.data?.token === validatedFields.data.otp) {
       // remove cookie
       cookies().delete('authjs.secret');
+
+      // delete the token
+      await deleteToken(userId);
       // login here to create new session
       await signInUser('TOTP', {
         userId: userId,
