@@ -2,6 +2,13 @@ import { getVerificationToken } from '@/db/query/Token';
 import OnBoardingForm from './OnBoardingForm';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Register',
+  description: 'A simple Register page',
+};
+
 export default async function onBoarding({
   searchParams,
 }: {
@@ -56,7 +63,7 @@ export default async function onBoarding({
             Fill these details to get started.
           </p>
         </div>
-        <OnBoardingForm email={data.data?.identifier!} />
+        <OnBoardingForm email={data.data?.identifier!} isAdmin={false} />
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ export async function signIn(prevState: any, formData: FormData) {
     await signInUser('credentials', {
       username: validatedFields.data.username,
       password: validatedFields.data.password,
-      redirect: false,
+      redirect: true,
     });
   } catch (error: any) {
     if (error.code === 'invalid-credentials') {
@@ -39,15 +39,17 @@ export async function signIn(prevState: any, formData: FormData) {
         },
         message: error.message,
       };
-    } else {
+    } else if (error.code === 'OauthError') {
       return {
         type: 'error',
         errors: {
           username: undefined,
           password: undefined,
         },
-        message: 'Something went wrong. Please try again.',
+        message: error.message,
       };
+    } else {
+      throw error;
     }
   }
   redirect('/profile');

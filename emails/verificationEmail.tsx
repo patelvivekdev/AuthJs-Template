@@ -31,7 +31,7 @@ export const VerificationEmail = ({
 }: VerificationEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your login code for Drizzle + Turso Auth</Preview>
+    <Preview>Your login code for AuthJs Template</Preview>
     <Body style={main}>
       <Container style={container}>
         <Row>
@@ -54,7 +54,7 @@ export const VerificationEmail = ({
           </code>
           <Hr style={hr} />
           <Link href={baseUrl} style={reportLink}>
-            Drizzle + Turso + Next-Auth
+            AuthJs Template
           </Link>
         </Section>
       </Container>

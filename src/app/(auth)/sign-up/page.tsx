@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
 import SignUpForm from './SignUpForm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Register',
+  description: 'A simple Register page',
+};
 
 export default function SignUp() {
   return (

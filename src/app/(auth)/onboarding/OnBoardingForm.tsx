@@ -17,15 +17,28 @@ const initialState = {
   errors: null,
 };
 
-export default function OnBoardingForm({ email }: { email: string }) {
+export default function OnBoardingForm({
+  email,
+  isAdmin,
+}: {
+  email: string;
+  isAdmin: boolean;
+}) {
   // const [state, submitAction, isPending] = useActionState(onBoarding, initialState);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const onBoardingWithEmail = onBoarding.bind(null, email as string);
+  let onBoardingWithEmail = onBoarding.bind(null, email as string);
+  let onBoardingWithIsAdmin = onBoardingWithEmail.bind(
+    null,
+    isAdmin as boolean,
+  );
 
-  const [state, submitAction] = useFormState(onBoardingWithEmail, initialState);
+  const [state, submitAction] = useFormState(
+    onBoardingWithIsAdmin,
+    initialState,
+  );
 
   const router = useRouter();
   useEffect(() => {

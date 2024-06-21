@@ -15,6 +15,27 @@
       "when": 1716522844951,
       "tag": "0001_brainy_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1718512560721,
+      "tag": "0002_naive_sunspot",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1718681907655,
+      "tag": "0003_amazing_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1718860420199,
+      "tag": "0004_passkey",
+      "breakpoints": true
     }
   ]
 }

@@ -15,7 +15,7 @@ export default async function Navbar() {
     <header className='sticky top-0 z-50 border-b bg-white px-4 py-3 shadow-sm dark:border-gray-800 dark:bg-gray-800'>
       <div className='container mx-auto flex items-center justify-between'>
         <Link className='text-lg font-bold' href='/'>
-          Drizzle + Turso
+          AuthJs Template
         </Link>
         {session ? (
           <div className='flex items-center space-x-4'>
@@ -44,14 +44,10 @@ export default async function Navbar() {
         ) : (
           <div className='flex items-center space-x-4'>
             <Link href='/sign-in'>
-              <Button size='sm' variant='outline'>
-                Sign In
-              </Button>
+              <Button size='sm'>Sign In</Button>
             </Link>
             <Link href='/sign-up'>
-              <Button size='sm' variant='outline'>
-                Sign Up
-              </Button>
+              <Button size='sm'>Sign Up</Button>
             </Link>
           </div>
         )}

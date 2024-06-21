@@ -17,19 +17,37 @@ import DeleteAccount from './_Components/DeleteAccountButton';
 import LinkAccountButton from './_Components/LinkAccountButton';
 import UnlinkAccountButton from './_Components/UnlinkAccountButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Edit } from 'lucide-react';
+import { Edit, KeyRound } from 'lucide-react';
 import AddPasswordButton from './_Components/AddPasswordButton';
+import { User as DefaultUser } from 'next-auth';
+
+import type { Metadata } from 'next';
+import { WebAuthnRegister } from '@/components/WebAuthnButton';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+  description: 'Manage your profile',
+};
+
+// Extend User interface
+interface User extends DefaultUser {
+  role: string;
+  username: string;
+}
 
 export default async function Dashboard() {
   const session = await auth();
-  const user = session?.user;
+  const user = session?.user as User;
   if (!user) {
     redirect('/sign-in');
   }
 
   let userData = await getUserById(user?.id!);
+  if (!userData) {
+    redirect('/sign-in');
+  }
 
-  let accounts = userData?.accounts.map((account) => account.provider);
+  let accounts = userData.accounts.map((account) => account.provider);
   return (
     <div className='container mx-auto px-8 py-12'>
       <div className='grid grid-cols-1 gap-8 md:grid-cols-2'>
@@ -67,37 +85,36 @@ export default async function Dashboard() {
                   disabled
                 />
               </div>
-              <div className='flex flex-row justify-center gap-2'>
-                {accounts?.includes('email') ? (
-                  <Link href='/profile/change-password'>
-                    <Button
-                      className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
-                      type='submit'
-                    >
-                      Change Password
-                    </Button>
-                  </Link>
-                ) : (
-                  <AddPasswordButton email={user?.email!} />
-                )}
-                <Link href='/profile/edit'>
-                  <Button className='w-full' type='submit'>
-                    Edit Profile
-                  </Button>
-                </Link>
+              <div>
+                <Label htmlFor='role'>Username</Label>
+                <Input
+                  defaultValue={user?.username ? user?.username : ''}
+                  id='role'
+                  type='text'
+                  disabled
+                />
+              </div>
+              <div>
+                <Label htmlFor='role'>Role</Label>
+                <Input
+                  defaultValue={user?.role ? user?.role : ''}
+                  id='role'
+                  type='text'
+                  disabled
+                />
               </div>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Connected Accounts</CardTitle>
+            <CardTitle>Manage Account</CardTitle>
             <CardDescription>
               Manage your connected social media accounts.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='space-y-4'>
+            <div className='flex flex-col space-y-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>
                   <Icons.google className='mr-2 h-6 w-6' />
@@ -134,21 +151,48 @@ export default async function Dashboard() {
                   <LinkAccountButton provider='github' />
                 )}
               </div>
-              {/* <div className='flex items-center justify-between'>
+              <div className='flex items-center justify-between'>
                 <div className='flex items-center space-x-4'>
-                  <Icons.twitter className='mr-2 h-6 w-6 fill-current' />
+                  <KeyRound className='mr-2 h-6 w-6' />
                   <div>
-                    <h3 className='text-lg font-medium'>Twitter</h3>
+                    <h3 className='text-lg font-medium'>2FA</h3>
                     <p className='text-gray-500 dark:text-gray-400'>
-                      Not connected
+                      {userData?.isTotpEnabled ? 'Enabled' : 'Disabled'}
                     </p>
                   </div>
                 </div>
-                <Button size='sm' variant='outline'>
-                  Connect
-                </Button>
-              </div> */}
-              <DeleteAccount userId={user?.id!} />
+                {userData?.isTotpEnabled ? (
+                  <UnlinkAccountButton userId={user?.id!} provider='github' />
+                ) : (
+                  <Link href='/profile/two-factor'>
+                    <Button size='sm'>Enable 2FA</Button>
+                  </Link>
+                )}
+              </div>
+              <div>
+                <WebAuthnRegister />
+              </div>
+              <div className='mt-8 flex flex-col justify-center gap-4 border-t-4 pt-8 sm:flex-row'>
+                {accounts?.includes('email') ? (
+                  <Link href='/profile/change-password'>
+                    <Button
+                      size='sm'
+                      className='w-full bg-sky-400 text-black hover:bg-sky-600 dark:bg-sky-400 dark:hover:bg-sky-600'
+                      type='submit'
+                    >
+                      Change Password
+                    </Button>
+                  </Link>
+                ) : (
+                  <AddPasswordButton email={user?.email!} />
+                )}
+                <Link href='/profile/edit'>
+                  <Button size='sm' className='w-full' type='submit'>
+                    Edit Profile
+                  </Button>
+                </Link>
+                <DeleteAccount userId={user?.id!} />
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -3,6 +3,7 @@ import { signIn, signOut } from '@/auth';
 import { Button } from './ui/button';
 import { Icons } from './icons';
 import { unstable_noStore } from 'next/cache';
+
 export function SignIn({ provider }: { provider?: string }) {
   return (
     <form
@@ -59,6 +60,22 @@ export function GoogleSignIn() {
       <Button className='w-full' variant='outline'>
         <Icons.google className='mr-2 h-4 w-4' />
         Google
+      </Button>
+    </form>
+  );
+}
+
+export function WebAuthIn() {
+  return (
+    <form
+      className='w-full'
+      action={async () => {
+        'use server';
+        await signIn('passkey', { action: 'register' });
+      }}
+    >
+      <Button className='w-full' variant='outline'>
+        Register new Passkey
       </Button>
     </form>
   );

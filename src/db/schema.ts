@@ -16,7 +16,12 @@ export const users = sqliteTable('user', {
   username: text('username'),
   password: text('password'),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
+  role: text('role').default('USER'),
   image: text('image'),
+  totpSecret: text('totpSecret'),
+  isTotpEnabled: integer('isTotpEnabled', { mode: 'boolean' })
+    .notNull()
+    .default(false),
 });
 
 export const accounts = sqliteTable(
@@ -68,6 +73,29 @@ export const verificationTokens = sqliteTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  }),
+);
+
+export const authenticators = sqliteTable(
+  'authenticator',
+  {
+    credentialID: text('credentialID').notNull().unique(),
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    providerAccountId: text('providerAccountId').notNull(),
+    credentialPublicKey: text('credentialPublicKey').notNull(),
+    counter: integer('counter').notNull(),
+    credentialDeviceType: text('credentialDeviceType').notNull(),
+    credentialBackedUp: integer('credentialBackedUp', {
+      mode: 'boolean',
+    }).notNull(),
+    transports: text('transports'),
+  },
+  (authenticator) => ({
+    compositePK: primaryKey({
+      columns: [authenticator.userId, authenticator.credentialID],
+    }),
   }),
 );
 
