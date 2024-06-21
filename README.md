@@ -4,6 +4,14 @@ A template repo for starting authentication in your upcoming Next.js application
 
 ## What's inside?
 
+- How to setup Credentials login with username/password in NextJs.
+- How to setup Two factor in NextJs.
+- How to setup Passkey in NextJs.
+- How to setup Oauth Login in NextJs.
+- How to Link accounts in NextJs.
+
+All these with Next-auth(AuthJs v5).
+
 ---
 
 ## Basic
@@ -38,10 +46,11 @@ A template repo for starting authentication in your upcoming Next.js application
 - [x] Two Factor - Register with QRCode | Protected
 - [x] Two Factor - Verify after register | Protected
 - [x] Two Factor - Used After login(Oauth as well as Credentials) | Public
+- [ ] Add Backup options
 
 ## Passkey/ Passwordless Login
 
-- [ ] Passkey/ Passwordless Login
+- [x] Passkey/ Passwordless Login
 
 ## Role Based Access
 
@@ -57,6 +66,10 @@ A template repo for starting authentication in your upcoming Next.js application
 ## Database sessions
 
 - [x] Database sessions checkout [db-session](https://github.com/patelvivekdev/drizzle-next-auth-turso/tree/db-session)
+
+## Emails
+
+- [ ] Send email for every account change event and store the history.
 
 ## Links
 
