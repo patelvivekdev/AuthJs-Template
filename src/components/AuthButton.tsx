@@ -71,7 +71,7 @@ export function WebAuthIn() {
       className='w-full'
       action={async () => {
         'use server';
-        await signIn('passkey');
+        await signIn('passkey', { action: 'register' });
       }}
     >
       <Button className='w-full' variant='outline'>

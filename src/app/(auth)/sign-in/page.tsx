@@ -4,6 +4,7 @@ import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import type { Metadata } from 'next';
+import { WebAuthnLogin } from '@/components/WebAuthnButton';
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -36,6 +37,8 @@ export default async function SignIn({
         </div>
         <SignInForm />
         <div className='px-2 text-center'>Or continue with</div>
+        <WebAuthnLogin />
+
         <div className='flex items-center justify-center space-x-4'>
           <GithubSignIn />
           <GoogleSignIn />
