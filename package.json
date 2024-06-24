@@ -41,6 +41,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
+    "framer-motion": "^11.2.11",
     "input-otp": "^1.2.4",
     "libsql": "^0.3.19",
     "lucide-react": "^0.395.0",

@@ -1,9 +1,13 @@
+'use client';
+
+import OrbitingCirclesDemo from '@/components/Hero';
 import Link from 'next/link';
 
 export default function Home() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] dark:from-gray-950 dark:to-gray-900'>
       <div className='container flex flex-col items-center justify-center gap-12 px-4 py-16'>
+        <OrbitingCirclesDemo />
         <h1 className='text-3xl font-extrabold text-white dark:text-gray-50 sm:text-[5rem]'>
           Next
           <span className='text-[#9b59b6]'>Auth.js</span>

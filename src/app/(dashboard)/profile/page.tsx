@@ -5,14 +5,13 @@ import {
   CardContent,
   Card,
 } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserById } from '@/db/query/User';
 import Link from 'next/link';
+import EditAccountForm from './_Components/EditProfileForm';
 import DeleteAccount from './_Components/DeleteAccountButton';
 import LinkAccountButton from './_Components/LinkAccountButton';
 import UnlinkAccountButton from './_Components/UnlinkAccountButton';
@@ -25,10 +24,18 @@ import type { Metadata } from 'next';
 import { WebAuthnRegister } from '@/components/WebAuthnButton';
 import DisableTwoFactorButton from './_Components/DisableTwoFactorButton';
 
-export const metadata: Metadata = {
-  title: 'Profile',
-  description: 'Manage your profile',
-};
+export async function generateMetadata(): Promise<Metadata | undefined> {
+  const session = await auth();
+  const user = session?.user as User;
+  if (!user) {
+    redirect('/sign-in');
+  }
+
+  return {
+    title: user.name + ' Profile',
+    description: 'Manage your profile',
+  };
+}
 
 // Extend User interface
 interface User extends DefaultUser {
@@ -68,42 +75,7 @@ export default async function Dashboard() {
                 </Avatar>
                 <Edit className='h-4 w-4' />
               </div>
-              <div>
-                <Label htmlFor='name'>Name</Label>
-                <Input
-                  defaultValue={user?.name ? user?.name : ''}
-                  id='name'
-                  type='text'
-                  disabled
-                />
-              </div>
-              <div>
-                <Label htmlFor='email'>Email</Label>
-                <Input
-                  defaultValue={user?.email ? user?.email : ''}
-                  id='email'
-                  type='email'
-                  disabled
-                />
-              </div>
-              <div>
-                <Label htmlFor='role'>Username</Label>
-                <Input
-                  defaultValue={user?.username ? user?.username : ''}
-                  id='role'
-                  type='text'
-                  disabled
-                />
-              </div>
-              <div>
-                <Label htmlFor='role'>Role</Label>
-                <Input
-                  defaultValue={user?.role ? user?.role : ''}
-                  id='role'
-                  type='text'
-                  disabled
-                />
-              </div>
+              <EditAccountForm userData={userData} />
             </div>
           </CardContent>
         </Card>
@@ -187,11 +159,6 @@ export default async function Dashboard() {
                 ) : (
                   <AddPasswordButton email={user?.email!} />
                 )}
-                <Link href='/profile/edit'>
-                  <Button size='sm' className='w-full' type='submit'>
-                    Edit Profile
-                  </Button>
-                </Link>
                 <DeleteAccount userId={user?.id!} />
               </div>
             </div>
