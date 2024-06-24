@@ -12,7 +12,7 @@ import resendIcon from '@/../public/resend.jpg';
 
 export default function OrbitingCirclesDemo() {
   return (
-    <div className='relative flex h-[400] w-full max-w-[32rem] flex-col items-center justify-center gap-4 overflow-hidden rounded-lg sm:h-[700px] sm:max-w-[60rem]'>
+    <div className='relative flex h-[400px] w-full max-w-[32rem] flex-col items-center justify-center gap-4 overflow-hidden rounded-lg sm:h-[700px] sm:max-w-[60rem]'>
       <SparklesText
         className='text-center text-3xl sm:text-[4rem]'
         text='AuthJs Template'
