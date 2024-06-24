@@ -76,14 +76,14 @@ All these with Next-auth(AuthJs v5).
 
 ## Links
 
-- [Live Link JWT Sessions](https://drizzle-next-auth-turso.vercel.app)
-- [Live Link DB Sessions](https://drizzle-next-auth-turso-db-sessions.vercel.app)
+- [Live Link JWT Sessions](https://authjs-template.patelvivek.dev)
+- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.dev)
 - [AuthJS](https://authjs.dev)
 - [Drizzle](https://drizzle.team)
 - [Turso](https://turso.dev)
 - [NextJs](https://nextjs.org)
 - [Magic Ui](https://magicui.design)
-- [patelvivek.dev](https://patelvivek.dev)
+- [patelvivek.dev](https://patelvivek.dev/projects/authjs-template-for-nextjs-developers)
 
 ## Open In IDX
 
