@@ -2,6 +2,8 @@
 
 A template repo for starting authentication in your upcoming Next.js application. Used Drizzle, Auth.js(Next-Auth), Turso.
 
+![Image](./public/authjs-template.png)
+
 ## What's inside?
 
 - How to setup Credentials login with username/password in NextJs.
@@ -49,7 +51,6 @@ All these with Next-auth(AuthJs v5).
 - [x] Add Backup options(Verify using email)
 - [x] Disable Two Factor.
 
-
 ## Passkey/ Passwordless Login
 
 - [x] Passkey/ Passwordless Login
@@ -81,6 +82,7 @@ All these with Next-auth(AuthJs v5).
 - [Drizzle](https://drizzle.team)
 - [Turso](https://turso.dev)
 - [NextJs](https://nextjs.org)
+- [Magic Ui](https://magicui.design)
 - [patelvivek.dev](https://patelvivek.dev)
 
 ## Open In IDX
