@@ -46,7 +46,9 @@ All these with Next-auth(AuthJs v5).
 - [x] Two Factor - Register with QRCode | Protected
 - [x] Two Factor - Verify after register | Protected
 - [x] Two Factor - Used After login(Oauth as well as Credentials) | Public
-- [ ] Add Backup options
+- [x] Add Backup options(Verify using email)
+- [x] Disable Two Factor.
+
 
 ## Passkey/ Passwordless Login
 
