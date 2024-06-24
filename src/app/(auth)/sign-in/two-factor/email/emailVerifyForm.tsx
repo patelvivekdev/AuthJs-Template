@@ -5,7 +5,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import {
@@ -15,10 +14,8 @@ import {
 } from '@/components/ui/input-otp';
 import { SubmitButton } from '@/components/SubmitButton';
 import { useFormState } from 'react-dom';
-import { verifyTwoFactor, twoFactorEmail } from '@/actions/auth';
+import { verifyEmailTwoFactor } from '@/actions/auth';
 import Link from 'next/link';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 const initialState = {
   type: '',
@@ -26,33 +23,19 @@ const initialState = {
   errors: null,
 };
 
-export default function OtpForm({ userId }: { userId: string }) {
-  // const [state, submitAction, isPending] = useActionState(verifyTwoFactor, initialState);
-  const actionWithUserId = verifyTwoFactor.bind(null, userId as string);
+export default function TwoFactorEmailForm({ userId }: { userId: string }) {
+  // const [state, submitAction, isPending] = useActionState(verifyEmailTwoFactor, initialState);
+  const actionWithUserId = verifyEmailTwoFactor.bind(null, userId as string);
   const [state, action] = useFormState(actionWithUserId, initialState as any);
-
-  const twoFactorEmailWithUserID = twoFactorEmail.bind(null, userId as string);
-  const [emailState, emailAction] = useFormState(
-    twoFactorEmailWithUserID,
-    initialState as any,
-  );
-
-  const router = useRouter();
-  useEffect(() => {
-    if (emailState.type === 'success') {
-      router.push('/sign-in/two-factor/email');
-    }
-  }, [emailState]);
-
   return (
     <Card className='w-full max-w-md'>
       <CardHeader>
         <CardTitle>Verify your identity</CardTitle>
         <CardDescription>
-          Enter the 6-digit code from your registered authenticator.
+          Enter the 6-digit code from your email.
         </CardDescription>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className='flex flex-col gap-4'>
         <form action={action}>
           <div className='mb-4 space-y-2'>
             {state.errors && (
@@ -82,25 +65,10 @@ export default function OtpForm({ userId }: { userId: string }) {
           </div>
           <SubmitButton size='sm'>Verify Code</SubmitButton>
         </form>
+        <Link className='underline' href='/sign-in/two-factor'>
+          Go back
+        </Link>
       </CardContent>
-      <CardFooter>
-        <div className='space-y-2'>
-          <form action={emailAction}>
-            <SubmitButton>Verify using email</SubmitButton>
-          </form>
-          <p className='text-muted-foreground'>
-            Having problem accessing your account?{' '}
-            <Link
-              href='mailto: admin@patelvivek.dev'
-              className='underline'
-              prefetch={false}
-            >
-              Contact Admin
-            </Link>
-            .
-          </p>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

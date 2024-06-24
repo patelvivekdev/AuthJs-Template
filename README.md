@@ -2,7 +2,17 @@
 
 A template repo for starting authentication in your upcoming Next.js application. Used Drizzle, Auth.js(Next-Auth), Turso.
 
+![Image](./public/authjs-template.png)
+
 ## What's inside?
+
+- How to setup Credentials login with username/password in NextJs.
+- How to setup Two factor in NextJs.
+- How to setup Passkey in NextJs.
+- How to setup Oauth Login in NextJs.
+- How to Link accounts in NextJs.
+
+All these with Next-auth(AuthJs v5).
 
 ---
 
@@ -38,10 +48,12 @@ A template repo for starting authentication in your upcoming Next.js application
 - [x] Two Factor - Register with QRCode | Protected
 - [x] Two Factor - Verify after register | Protected
 - [x] Two Factor - Used After login(Oauth as well as Credentials) | Public
+- [x] Add Backup options(Verify using email)
+- [x] Disable Two Factor.
 
 ## Passkey/ Passwordless Login
 
-- [ ] Passkey/ Passwordless Login
+- [x] Passkey/ Passwordless Login
 
 ## Role Based Access
 
@@ -58,15 +70,20 @@ A template repo for starting authentication in your upcoming Next.js application
 
 - [x] Database sessions checkout [db-session](https://github.com/patelvivekdev/drizzle-next-auth-turso/tree/db-session)
 
+## Emails
+
+- [ ] Send email for every account change event and store the history.
+
 ## Links
 
-- [Live Link JWT Sessions](https://drizzle-next-auth-turso.vercel.app)
-- [Live Link DB Sessions](https://drizzle-next-auth-turso-db-sessions.vercel.app)
+- [Live Link JWT Sessions](https://authjs-template.patelvivek.dev)
+- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.dev)
 - [AuthJS](https://authjs.dev)
 - [Drizzle](https://drizzle.team)
 - [Turso](https://turso.dev)
 - [NextJs](https://nextjs.org)
-- [patelvivek.dev](https://patelvivek.dev)
+- [Magic Ui](https://magicui.design)
+- [patelvivek.dev](https://patelvivek.dev/projects/authjs-template-for-nextjs-developers)
 
 ## Open In IDX
 

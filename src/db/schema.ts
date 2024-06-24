@@ -4,7 +4,7 @@ import {
   text,
   primaryKey,
 } from 'drizzle-orm/sqlite-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import type { AdapterAccountType } from 'next-auth/adapters';
 
 export const users = sqliteTable('user', {
@@ -22,6 +22,9 @@ export const users = sqliteTable('user', {
   isTotpEnabled: integer('isTotpEnabled', { mode: 'boolean' })
     .notNull()
     .default(false),
+  createdAt: text('created_at')
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .notNull(),
 });
 
 export const accounts = sqliteTable(
@@ -70,6 +73,9 @@ export const verificationTokens = sqliteTable(
     identifier: text('identifier').notNull(),
     token: text('token').notNull(),
     expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
+    createdAt: text('created_at')
+      .default(sql`(CURRENT_TIMESTAMP)`)
+      .notNull(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),

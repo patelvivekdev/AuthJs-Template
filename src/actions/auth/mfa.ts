@@ -1,7 +1,7 @@
 'use server';
 
 import {
-  deleteUserAccount,
+  disableUserTwoFactor,
   enableTwoFactor,
   getTotpSecret,
 } from '@/db/query/User';
@@ -11,8 +11,13 @@ import { signIn as signInUser } from '@/auth';
 import { redirect } from 'next/navigation';
 import { verifyTOTP } from '@epic-web/totp';
 import { cookies } from 'next/headers';
+import {
+  createOtpForVerifyUserWithEmail,
+  deleteToken,
+  getVerificationTokenByUser,
+} from '@/db/query/Token';
 
-// =============================== Enable MFA ===============================
+// =============================== Enable Two Factor ===============================
 const enableMfaSchema = z.object({
   otp: z.string().min(6, {
     message: 'Your one-time password must be 6 characters.',
@@ -75,9 +80,9 @@ export async function enableMfa(
   }
 }
 
-// =============================== Disable MFA ===============================
-export async function disableMfa(userId: string, provider: string) {
-  await deleteUserAccount(userId, provider);
+// =============================== Disable Two Factor ===============================
+export async function disableTwoFactor(userId: string) {
+  await disableUserTwoFactor(userId);
   revalidatePath('/', 'layout');
 }
 
@@ -145,6 +150,111 @@ export async function verifyTwoFactor(
       TOTP: 'TOTP',
       redirect: false,
     });
+  } catch (error: any) {
+    if (error.code === 'invalid-credentials') {
+      return {
+        type: 'error',
+        errors: {
+          otp: undefined,
+        },
+        message: error.message,
+      };
+    } else {
+      throw error;
+    }
+  }
+  redirect('/profile');
+}
+
+// =============================== twoFactorEmail ===============================
+export async function twoFactorEmail(userId: string) {
+  try {
+    let emailData = await createOtpForVerifyUserWithEmail(userId);
+
+    if (!emailData.success) {
+      return {
+        type: 'error',
+        message: emailData.message || 'Failed to send email. Please try again.',
+      };
+    }
+
+    return {
+      type: 'success',
+      message: 'Please check your email for next step',
+    };
+  } catch (error: any) {
+    console.error('Failed to send email', error);
+    return {
+      type: 'error',
+      message: error.message || 'Failed to send email.',
+    };
+  }
+}
+
+// =============================== Verify Email MFA ===============================
+const verifyEmailTwoFactorSchema = z.object({
+  otp: z.string().min(6, {
+    message: 'Your one-time password must be 6 characters.',
+  }),
+});
+export async function verifyEmailTwoFactor(
+  userId: string,
+  prevState: any,
+  formData: FormData,
+) {
+  const validatedFields = verifyEmailTwoFactorSchema.safeParse({
+    otp: formData.get('otp'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      type: 'error',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields!!',
+    };
+  }
+  let user = await getVerificationTokenByUser(userId);
+  if (!user) {
+    return {
+      type: 'error',
+      errors: {
+        otp: undefined,
+      },
+      message: 'Two factor authentication failed.',
+    };
+  }
+  if (user.data?.expires! < new Date()) {
+    return {
+      type: 'error',
+      errors: {
+        otp: undefined,
+      },
+      message: 'Two factor authentication expired.',
+    };
+  }
+
+  try {
+    if (user.data?.token === validatedFields.data.otp) {
+      // remove cookie
+      cookies().delete('authjs.secret');
+
+      // delete the token
+      await deleteToken(userId);
+      // login here to create new session
+      await signInUser('TOTP', {
+        userId: userId,
+        TOTP: 'TOTP',
+        redirect: false,
+      });
+    } else {
+      return {
+        type: 'error',
+        errors: {
+          otp: undefined,
+        },
+        message: 'Error! Please try again with new code.',
+      };
+    }
   } catch (error: any) {
     if (error.code === 'invalid-credentials') {
       return {

@@ -36,6 +36,13 @@
       "when": 1718860420199,
       "tag": "0004_passkey",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1718952389590,
+      "tag": "0005_equal_havok",
+      "breakpoints": true
     }
   ]
 }
