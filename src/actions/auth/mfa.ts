@@ -1,7 +1,7 @@
 'use server';
 
 import {
-  deleteUserAccount,
+  disableUserTwoFactor,
   enableTwoFactor,
   getTotpSecret,
 } from '@/db/query/User';
@@ -17,7 +17,7 @@ import {
   getVerificationTokenByUser,
 } from '@/db/query/Token';
 
-// =============================== Enable MFA ===============================
+// =============================== Enable Two Factor ===============================
 const enableMfaSchema = z.object({
   otp: z.string().min(6, {
     message: 'Your one-time password must be 6 characters.',
@@ -80,9 +80,9 @@ export async function enableMfa(
   }
 }
 
-// =============================== Disable MFA ===============================
-export async function disableMfa(userId: string, provider: string) {
-  await deleteUserAccount(userId, provider);
+// =============================== Disable Two Factor ===============================
+export async function disableTwoFactor(userId: string) {
+  await disableUserTwoFactor(userId);
   revalidatePath('/', 'layout');
 }
 

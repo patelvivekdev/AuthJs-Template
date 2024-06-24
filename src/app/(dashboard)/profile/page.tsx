@@ -23,6 +23,7 @@ import { User as DefaultUser } from 'next-auth';
 
 import type { Metadata } from 'next';
 import { WebAuthnRegister } from '@/components/WebAuthnButton';
+import DisableTwoFactorButton from './_Components/DisableTwoFactorButton';
 
 export const metadata: Metadata = {
   title: 'Profile',
@@ -162,7 +163,7 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 {userData?.isTotpEnabled ? (
-                  <UnlinkAccountButton userId={user?.id!} provider='github' />
+                  <DisableTwoFactorButton userId={user?.id!} />
                 ) : (
                   <Link href='/profile/two-factor'>
                     <Button size='sm'>Enable 2FA</Button>

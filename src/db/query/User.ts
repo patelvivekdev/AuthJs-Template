@@ -243,6 +243,14 @@ export async function enableTwoFactor(userEmail: string, secret: string) {
   return user;
 }
 
+// Disable Two-factor
+export async function disableUserTwoFactor(userId: string) {
+  await db
+    .update(users)
+    .set({ isTotpEnabled: false, totpSecret: '' })
+    .where(eq(users.id, userId));
+}
+
 // Get TOTPSecret
 export const getTotpSecret = async (id: string) => {
   const result = await db.query.users.findFirst({
