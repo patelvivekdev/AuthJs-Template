@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default async function TwoFactorLogin() {
   const cookieStore = cookies();
-  const userId = cookieStore.get('authjs.secret');
+  const userId = cookieStore.get('authjs.two-factor');
 
   if (!userId) {
     redirect('/sign-in');

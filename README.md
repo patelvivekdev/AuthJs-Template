@@ -77,7 +77,8 @@ All these with Next-auth(AuthJs v5).
 ## Links
 
 - [Live Link JWT Sessions](https://authjs-template.patelvivek.dev)
-- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.dev)
+- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.devi
+
 - [AuthJS](https://authjs.dev)
 - [Drizzle](https://drizzle.team)
 - [Turso](https://turso.dev)
