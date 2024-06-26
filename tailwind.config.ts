@@ -68,10 +68,16 @@ const config = {
               'rotate(360deg) translateY(calc(var(--radius) * 1px)) rotate(-360deg)',
           },
         },
+        'border-beam': {
+          '100%': {
+            'offset-distance': '100%',
+          },
+        },
       },
       animation: {
         'caret-blink': 'caret-blink 1.25s ease-out infinite',
         orbit: 'orbit calc(var(--duration)*1s) linear infinite',
+        'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
       },
     },
   },

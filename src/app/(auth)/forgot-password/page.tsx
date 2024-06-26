@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { SubmitButton } from '@/components/SubmitButton';
 import { forgotPassword } from '@/actions/auth';
 import toast from 'react-hot-toast';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 const initialState = {
   type: '',
@@ -61,6 +62,7 @@ export default function ForgotPasswordPage() {
           </div>
         </form>
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

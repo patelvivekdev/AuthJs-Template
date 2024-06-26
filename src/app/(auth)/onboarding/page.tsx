@@ -3,6 +3,7 @@ import OnBoardingForm from './OnBoardingForm';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
 import type { Metadata } from 'next';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 export const metadata: Metadata = {
   title: 'Register',
@@ -65,6 +66,7 @@ export default async function onBoarding({
         </div>
         <OnBoardingForm email={data.data?.identifier!} isAdmin={false} />
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

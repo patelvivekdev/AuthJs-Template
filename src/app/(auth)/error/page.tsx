@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 'use client';
 
+import RadialGradient from '@/components/ui/radial-gradient';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -82,6 +83,7 @@ export default function AuthErrorPage() {
           {errorMap[error] || 'Please contact us if this error persists.'}
         </div>
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

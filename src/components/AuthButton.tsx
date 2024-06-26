@@ -38,7 +38,7 @@ export function GithubSignIn() {
     >
       <Button className='w-full' variant='outline'>
         <Icons.gitHub className='mr-2 h-4 w-4' />
-        GitHub
+        Sign in with GitHub
       </Button>
     </form>
   );
@@ -59,7 +59,7 @@ export function GoogleSignIn() {
     >
       <Button className='w-full' variant='outline'>
         <Icons.google className='mr-2 h-4 w-4' />
-        Google
+        Sign in with Google
       </Button>
     </form>
   );

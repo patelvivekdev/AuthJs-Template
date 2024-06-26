@@ -3,6 +3,7 @@ import ChangePasswordForm from './changePasswordForm';
 import { auth } from '@/auth';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 export const metadata: Metadata = {
   title: 'Change Password',
@@ -36,6 +37,7 @@ export default async function ChangePasswordPage() {
           </div>
         </div>
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

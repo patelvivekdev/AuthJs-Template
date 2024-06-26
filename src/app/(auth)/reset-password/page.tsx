@@ -3,6 +3,7 @@ import ResetPasswordForm from './resetPasswordForm';
 import { TokenNotFound } from '@/components/TokenNotFound';
 
 import type { Metadata } from 'next';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 export const metadata: Metadata = {
   title: 'Reset Password',
@@ -65,6 +66,7 @@ export default async function ResetPasswordPage({
         </div>
         <ResetPasswordForm email={data.data?.identifier!} />
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

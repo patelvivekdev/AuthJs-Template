@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { GithubSignIn, GoogleSignIn } from '@/components/AuthButton';
 import SignUpForm from './SignUpForm';
 import type { Metadata } from 'next';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 export const metadata: Metadata = {
   title: 'Register',
@@ -21,11 +22,16 @@ export default function SignUp() {
           </p>
         </div>
         <SignUpForm />
-        <div className='px-2 text-center'>Or continue with</div>
-        <div className='flex items-center justify-center space-x-4'>
-          <GithubSignIn />
-          <GoogleSignIn />
+        <div className='relative m-4'>
+          <div className='absolute inset-0 flex items-center'>
+            <span className='w-full border-t' />
+          </div>
+          <div className='relative flex justify-center text-base uppercase'>
+            <span className='bg-neutral-100 px-4 dark:bg-neutral-900'>Or</span>
+          </div>
         </div>
+        <GithubSignIn />
+        <GoogleSignIn />
         <div className='mt-6 flex items-center justify-between'>
           <div className='text-sm text-gray-500 dark:text-gray-400'>
             Already have an account ?{' '}
@@ -38,6 +44,7 @@ export default function SignUp() {
           </div>
         </div>
       </div>
+      <RadialGradient type='ellipse' origin='top' className='dark:invert' />
     </div>
   );
 }

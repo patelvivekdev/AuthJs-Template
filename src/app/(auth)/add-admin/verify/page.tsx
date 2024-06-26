@@ -2,6 +2,7 @@ import { getVerificationToken } from '@/db/query/Token';
 import { TokenNotFound } from '@/components/TokenNotFound';
 import { changeUserToAdmin, getUserByUsername } from '@/db/query/User';
 import OnBoardingForm from '../../onboarding/OnBoardingForm';
+import RadialGradient from '@/components/ui/radial-gradient';
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -70,6 +71,7 @@ export default async function ResetPasswordPage({
             )}
           </div>
         </div>
+        <RadialGradient type='ellipse' origin='top' className='dark:invert' />
       </div>
     );
   }
