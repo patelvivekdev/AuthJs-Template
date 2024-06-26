@@ -6,6 +6,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/db';
 import {
   getUserById,
+  getUserByProviderAccountId,
   getUserByUsername,
   getUserForTotp,
 } from './db/query/User';
@@ -122,17 +123,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    signIn({ user, credentials }) {
+    async signIn({ user, credentials, account }) {
+      const cookieStore = cookies();
+      const sessionToken = cookieStore.get('authjs.session-token');
+      console.log('sessionToken', sessionToken?.value);
       if (credentials) {
         // @ts-ignore
         if (credentials.TOTP === 'TOTP') {
           return true;
         }
       }
+
+      // check if account is already linked or not after user is authenticated
+      if (sessionToken?.value) {
+        if (account) {
+          const user = await getUserByProviderAccountId(
+            account.providerAccountId,
+          );
+          if (!user) {
+            return true;
+          }
+          return '/sign-in/?error=OAuthAccountNotLinked';
+        }
+      }
+
       // @ts-ignore
       if (user.isTotpEnabled) {
         cookies().set({
-          name: 'authjs.secret',
+          name: 'authjs.two-factor',
           // @ts-ignore
           value: user.id!,
           httpOnly: true,
