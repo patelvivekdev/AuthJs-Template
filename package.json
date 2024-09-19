@@ -45,7 +45,7 @@
     "input-otp": "^1.2.4",
     "libsql": "^0.3.19",
     "lucide-react": "^0.395.0",
-    "next": "14.2.7",
+    "next": "14.2.10",
     "next-auth": "^5.0.0-beta.20",
     "next-themes": "^0.3.0",
     "qrcode": "^1.5.4",
