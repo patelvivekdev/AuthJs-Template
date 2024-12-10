@@ -12,7 +12,11 @@ export default function UnlinkAccountButton({
   const bindProvider = bindUserId.bind(null, provider as string);
   return (
     <form action={bindProvider}>
-      <SubmitButton size='sm' variant='destructive'>
+      <SubmitButton
+        size='sm'
+        variant='destructive'
+        pendingText='Disconnecting...'
+      >
         Disconnect
       </SubmitButton>
     </form>

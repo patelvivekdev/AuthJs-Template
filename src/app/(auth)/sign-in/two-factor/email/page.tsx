@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function emailTwoFactorVerify() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const userId = cookieStore.get('authjs.two-factor');
 
   if (!userId) {

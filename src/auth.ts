@@ -124,9 +124,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ user, credentials, account }) {
-      const cookieStore = cookies();
+      const cookieStore = await cookies();
       const sessionToken = cookieStore.get('authjs.session-token');
-      console.log('sessionToken', sessionToken?.value);
       if (credentials) {
         // @ts-ignore
         if (credentials.TOTP === 'TOTP') {
@@ -149,7 +148,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // @ts-ignore
       if (user.isTotpEnabled) {
-        cookies().set({
+        const cookieStore = await cookies();
+        cookieStore.set({
           name: 'authjs.two-factor',
           // @ts-ignore
           value: user.id!,

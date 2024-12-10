@@ -10,13 +10,12 @@ export const metadata: Metadata = {
   description: 'Add password to your account',
 };
 
-export default async function AddPasswordPage({
-  searchParams,
-}: {
-  searchParams?: {
+export default async function AddPasswordPage(props: {
+  searchParams?: Promise<{
     token?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const token = searchParams?.token || '';
   if (token === '') {
     return (

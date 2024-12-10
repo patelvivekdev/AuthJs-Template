@@ -4,6 +4,7 @@
 import RadialGradient from '@/components/ui/radial-gradient';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 enum Error {
   Configuration = 'Configuration',
@@ -70,6 +71,14 @@ const errorMap = {
 };
 
 export default function AuthErrorPage() {
+  return (
+    <Suspense>
+      <Search />
+    </Suspense>
+  );
+}
+
+function Search() {
   const search = useSearchParams();
   const error = search.get('error') as Error;
 

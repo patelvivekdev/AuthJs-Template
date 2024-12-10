@@ -18,7 +18,7 @@ export default async function Component() {
   if (!user) {
     redirect('/sign-in');
   }
-  const { secret, period, digits, algorithm } = generateTOTP();
+  const { secret, period, digits, algorithm } = await generateTOTP();
   const otpUri = getTOTPAuthUri({
     period,
     digits,

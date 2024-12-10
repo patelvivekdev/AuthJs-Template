@@ -4,10 +4,8 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { SignOut } from './AuthButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { unstable_noStore } from 'next/cache';
 
 export default async function Navbar() {
-  unstable_noStore();
   const session = await auth();
   const user = session?.user;
 

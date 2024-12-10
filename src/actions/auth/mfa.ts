@@ -42,7 +42,7 @@ export async function enableMfa(
   }
 
   try {
-    const isValid = verifyTOTP({ otp: validatedFields.data.otp, secret });
+    const isValid = await verifyTOTP({ otp: validatedFields.data.otp, secret });
     if (!isValid) {
       return {
         type: 'error',
@@ -132,7 +132,7 @@ export async function verifyTwoFactor(
   let secret = user.totpSecret;
 
   try {
-    const isValid = verifyTOTP({ otp: validatedFields.data.otp, secret });
+    const isValid = await verifyTOTP({ otp: validatedFields.data.otp, secret });
     if (!isValid) {
       return {
         type: 'error',
@@ -143,7 +143,7 @@ export async function verifyTwoFactor(
       };
     }
     // remove cookie
-    cookies().delete('authjs.secret');
+    (await cookies()).delete('authjs.secret');
     // login here to create new session
     await signInUser('TOTP', {
       userId: userId,
@@ -236,7 +236,7 @@ export async function verifyEmailTwoFactor(
   try {
     if (user.data?.token === validatedFields.data.otp) {
       // remove cookie
-      cookies().delete('authjs.secret');
+      (await cookies()).delete('authjs.secret');
 
       // delete the token
       await deleteToken(userId);

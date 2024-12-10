@@ -10,13 +10,12 @@ export const metadata: Metadata = {
   description: 'A simple Register page',
 };
 
-export default async function onBoarding({
-  searchParams,
-}: {
-  searchParams?: {
+export default async function onBoarding(props: {
+  searchParams?: Promise<{
     code?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const token = searchParams?.code || '';
   if (token === '') {
     return (

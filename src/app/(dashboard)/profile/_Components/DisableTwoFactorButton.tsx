@@ -5,7 +5,7 @@ export default function DisableTwoFactorButton({ userId }: { userId: string }) {
   const bindUserId = disableTwoFactor.bind(null, userId as string);
   return (
     <form action={bindUserId}>
-      <SubmitButton size='sm' variant='destructive'>
+      <SubmitButton size='sm' variant='destructive' pendingText='Disabling...'>
         Disable Two Factor
       </SubmitButton>
     </form>

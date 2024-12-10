@@ -3,11 +3,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from 'next-themes';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Toaster } from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import Navbar from '@/components/Navbar';
 import { Inter } from 'next/font/google';
 import { Rubik } from 'next/font/google';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description: 'A starter authentication template for Next.js',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body
         className={cn(
-          'mx-auto bg-neutral-100 dark:bg-neutral-900',
+          'mx-auto h-screen bg-neutral-100 dark:bg-neutral-900',
           inter.variable,
           rubik.variable,
         )}
@@ -47,7 +47,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
-          <Toaster position='top-center' />
+          <Toaster />
           <ThemeToggle />
         </ThemeProvider>
       </body>

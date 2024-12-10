@@ -1,6 +1,6 @@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { SubmitButton } from '@/components/SubmitButton';
+import { Button } from '@/components/ui/button';
 
 export default function EditProfileForm({ userData }: { userData: any }) {
   return (
@@ -12,6 +12,7 @@ export default function EditProfileForm({ userData }: { userData: any }) {
             defaultValue={userData?.name ? userData?.name : ''}
             id='name'
             type='text'
+            disabled
           />
         </div>
         <div>
@@ -20,6 +21,7 @@ export default function EditProfileForm({ userData }: { userData: any }) {
             defaultValue={userData?.username ? userData?.username : ''}
             id='role'
             type='text'
+            disabled
           />
         </div>
         <div>
@@ -32,7 +34,9 @@ export default function EditProfileForm({ userData }: { userData: any }) {
           />
         </div>
         <div>
-          <SubmitButton size='sm'>Update Profile</SubmitButton>
+          <Button className='w-full' disabled size='sm'>
+            Update Profile
+          </Button>
         </div>
       </form>
     </>
