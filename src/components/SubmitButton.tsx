@@ -8,6 +8,7 @@ export function SubmitButton({
   variant,
   size,
   children,
+  pendingText,
 }: {
   variant?:
     | 'default'
@@ -19,8 +20,11 @@ export function SubmitButton({
     | null;
   size?: 'sm' | 'default' | 'lg' | 'icon' | null;
   children: React.ReactNode;
+  pendingText?: string;
 }) {
   const { pending } = useFormStatus();
+
+  pendingText = pendingText || 'Submitting...';
 
   return (
     <Button
@@ -30,7 +34,7 @@ export function SubmitButton({
       className='w-full'
       disabled={pending}
     >
-      {pending ? 'Submitting...' : children}
+      {pending ? pendingText : children}
     </Button>
   );
 }

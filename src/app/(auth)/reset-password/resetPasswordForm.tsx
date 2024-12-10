@@ -1,15 +1,14 @@
 'use client';
 // import { useActionState } from 'react';
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { resetPassword } from '@/actions/auth';
-import { useFormState } from 'react-dom';
-import { SubmitButton } from '@/components/SubmitButton';
 import { useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
@@ -18,14 +17,12 @@ const initialState = {
 };
 
 export default function ResetPasswordForm({ email }: { email: string }) {
-  // const [state, submitAction, isPending] = useActionState(resetPassword, initialState);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const resetPasswordWithEmail = resetPassword.bind(null, email as string);
 
-  const [state, submitAction] = useFormState(
+  const [state, submitAction, isPending] = useActionState(
     resetPasswordWithEmail,
     initialState,
   );
@@ -36,7 +33,7 @@ export default function ResetPasswordForm({ email }: { email: string }) {
       toast.success(state.message);
       router.push('/sign-in');
     }
-  }, [state]);
+  }, [router, state]);
 
   return (
     <form action={submitAction} className='space-y-4'>
@@ -97,7 +94,9 @@ export default function ResetPasswordForm({ email }: { email: string }) {
           <p className='text-red-500'>{state.errors.password2}</p>
         )}
       </div>
-      <SubmitButton>Save Password</SubmitButton>
+      <Button className='w-full' disabled={isPending} type='submit'>
+        {isPending ? 'Resetting...' : 'Reset Password'}
+      </Button>
     </form>
   );
 }

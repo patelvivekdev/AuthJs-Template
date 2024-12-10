@@ -1,14 +1,12 @@
 'use client';
-// import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useActionState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { SubmitButton } from '@/components/SubmitButton';
 import { forgotPassword } from '@/actions/auth';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import RadialGradient from '@/components/ui/radial-gradient';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
@@ -17,18 +15,19 @@ const initialState = {
 };
 
 export default function ForgotPasswordPage() {
-  // const [state, submitAction, isPending] = useActionState(signUp, initialState);
-
-  const [state, submitAction] = useFormState(forgotPassword, initialState);
+  const [state, submitAction, isPending] = useActionState(
+    forgotPassword,
+    initialState,
+  );
   const router = useRouter();
   useEffect(() => {
     if (state.type === 'success') {
       toast.success(state.message);
       router.push('/');
     }
-  }, [state]);
+  }, [router, state]);
   return (
-    <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
+    <div className='mx-auto flex h-[calc(100vh-65px)] flex-col items-center justify-center'>
       <div className='m-4 mx-auto flex flex-col gap-2 rounded-lg p-8 shadow-lg shadow-black dark:shadow-white'>
         <div className='text-center'>
           <h1 className='mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl'>
@@ -58,7 +57,9 @@ export default function ForgotPasswordPage() {
                 <p className='text-red-500'>{state.errors.email}</p>
               )}
             </div>
-            <SubmitButton>Send an email</SubmitButton>
+            <Button disabled={isPending} type='submit'>
+              {isPending ? 'Sending...' : 'Send reset link'}
+            </Button>
           </div>
         </form>
       </div>

@@ -1,10 +1,9 @@
 'use client';
-// import { useActionState } from 'react';
+
 import { addAdmin } from '@/actions/admin';
-import { useFormState } from 'react-dom';
-import { SubmitButton } from '@/components/SubmitButton';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { useActionState } from 'react';
 
 const initialState = {
   type: '',
@@ -14,11 +13,9 @@ const initialState = {
 };
 
 export default function AddAdminForm({ adminName }: { adminName: string }) {
-  // const [state, submitAction, isPending] = useActionState(addAdmin, initialState);
-
   const action = addAdmin.bind(null, adminName as string);
 
-  const [state, submitAction] = useFormState(action, initialState);
+  const [state, submitAction, isPending] = useActionState(action, initialState);
 
   return (
     <form action={submitAction} className='space-y-4' key={state?.resetKey}>
@@ -45,7 +42,10 @@ export default function AddAdminForm({ adminName }: { adminName: string }) {
       {state.errors?.email && (
         <p className='text-red-500'>{state.errors.email}</p>
       )}
-      <SubmitButton>Send invitation link</SubmitButton>
+
+      <button className='w-full' disabled={isPending} type='submit'>
+        {isPending ? 'Sending...' : 'Send invitation link'}
+      </button>
     </form>
   );
 }

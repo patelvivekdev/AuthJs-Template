@@ -13,28 +13,30 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { SubmitButton } from '@/components/SubmitButton';
-import { useFormState } from 'react-dom';
 import { verifyTwoFactor, twoFactorEmail } from '@/actions/auth';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
   message: '',
-  errors: null,
+  errors: { otp: undefined },
 };
 
 export default function OtpForm({ userId }: { userId: string }) {
-  // const [state, submitAction, isPending] = useActionState(verifyTwoFactor, initialState);
   const actionWithUserId = verifyTwoFactor.bind(null, userId as string);
-  const [state, action] = useFormState(actionWithUserId, initialState as any);
+  const [state, submitAction, isPending] = useActionState(
+    actionWithUserId,
+    initialState,
+  );
 
   const twoFactorEmailWithUserID = twoFactorEmail.bind(null, userId as string);
-  const [emailState, emailAction] = useFormState(
+
+  const [emailState, emailAction, isEmailPending] = useActionState(
     twoFactorEmailWithUserID,
-    initialState as any,
+    initialState,
   );
 
   const router = useRouter();
@@ -42,7 +44,7 @@ export default function OtpForm({ userId }: { userId: string }) {
     if (emailState.type === 'success') {
       router.push('/sign-in/two-factor/email');
     }
-  }, [emailState]);
+  }, [emailState, router]);
 
   return (
     <Card className='w-full max-w-md'>
@@ -53,9 +55,9 @@ export default function OtpForm({ userId }: { userId: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
-        <form action={action}>
+        <form action={submitAction}>
           <div className='mb-4 space-y-2'>
-            {state.errors && (
+            {state.type === 'error' && (
               <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
                 <p className='text-red-500'>{state.message}</p>
               </div>
@@ -80,13 +82,17 @@ export default function OtpForm({ userId }: { userId: string }) {
               <p className='text-red-500'>{state.errors.otp}</p>
             )}
           </div>
-          <SubmitButton size='sm'>Verify Code</SubmitButton>
+          <Button className='w-full' disabled={isPending} size='sm'>
+            {isPending ? 'Verifying...' : 'Verify OTP'}
+          </Button>
         </form>
       </CardContent>
       <CardFooter>
         <div className='space-y-2'>
           <form action={emailAction}>
-            <SubmitButton>Verify using email</SubmitButton>
+            <Button className='w-full' disabled={isEmailPending} size='sm'>
+              {isEmailPending ? 'Sending...' : 'Verify using email'}
+            </Button>
           </form>
           <p className='text-muted-foreground'>
             Having problem accessing your account?{' '}

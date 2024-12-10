@@ -12,21 +12,23 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { SubmitButton } from '@/components/SubmitButton';
-import { useFormState } from 'react-dom';
 import { verifyEmailTwoFactor } from '@/actions/auth';
 import Link from 'next/link';
+import { useActionState } from 'react';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
   message: '',
-  errors: null,
+  errors: { otp: undefined },
 };
 
 export default function TwoFactorEmailForm({ userId }: { userId: string }) {
-  // const [state, submitAction, isPending] = useActionState(verifyEmailTwoFactor, initialState);
   const actionWithUserId = verifyEmailTwoFactor.bind(null, userId as string);
-  const [state, action] = useFormState(actionWithUserId, initialState as any);
+  const [state, submitAction, isPending] = useActionState(
+    actionWithUserId,
+    initialState,
+  );
   return (
     <Card className='w-full max-w-md'>
       <CardHeader>
@@ -36,9 +38,9 @@ export default function TwoFactorEmailForm({ userId }: { userId: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-4'>
-        <form action={action}>
+        <form action={submitAction}>
           <div className='mb-4 space-y-2'>
-            {state.errors && (
+            {state.type === 'error' && (
               <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
                 <p className='text-red-500'>{state.message}</p>
               </div>
@@ -63,7 +65,9 @@ export default function TwoFactorEmailForm({ userId }: { userId: string }) {
               <p className='text-red-500'>{state.errors.otp}</p>
             )}
           </div>
-          <SubmitButton size='sm'>Verify Code</SubmitButton>
+          <Button type='submit' disabled={isPending}>
+            {isPending ? 'Verifying...' : 'Verify Code'}
+          </Button>
         </form>
         <Link className='underline' href='/sign-in/two-factor'>
           Go back

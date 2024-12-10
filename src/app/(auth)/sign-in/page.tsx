@@ -12,13 +12,12 @@ export const metadata: Metadata = {
   description: 'A simple login page',
 };
 
-export default async function SignIn({
-  searchParams,
-}: {
-  searchParams?: {
+export default async function SignIn(props: {
+  searchParams?: Promise<{
     error?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const error = searchParams?.error || '';
   if (error) {
     redirect(`/error?error=${error}`);
@@ -29,7 +28,7 @@ export default async function SignIn({
     redirect('/profile');
   }
   return (
-    <div className='mx-auto flex min-h-screen flex-col items-center justify-center'>
+    <div className='mx-auto flex h-[calc(100vh-65px)] flex-col items-center justify-center'>
       <div className='mx-auto flex flex-col gap-2 rounded-lg p-8 shadow-lg shadow-black dark:shadow-white'>
         <div className='text-center'>
           <h1 className='text-4xl font-extrabold tracking-tight lg:text-5xl'>

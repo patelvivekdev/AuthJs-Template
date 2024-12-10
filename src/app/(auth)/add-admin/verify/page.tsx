@@ -4,13 +4,12 @@ import { changeUserToAdmin, getUserByUsername } from '@/db/query/User';
 import OnBoardingForm from '../../onboarding/OnBoardingForm';
 import RadialGradient from '@/components/ui/radial-gradient';
 
-export default async function ResetPasswordPage({
-  searchParams,
-}: {
-  searchParams?: {
+export default async function ResetPasswordPage(props: {
+  searchParams?: Promise<{
     token?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const token = searchParams?.token || '';
   if (token === '') {
     return (

@@ -1,10 +1,8 @@
 'use client';
-// import { useActionState } from 'react';
-import { useEffect } from 'react';
-import { useFormState } from 'react-dom';
-import toast from 'react-hot-toast';
-import { SubmitButton } from '@/components/SubmitButton';
+import { useActionState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { sendAddPasswordEmail } from '@/actions/auth';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
@@ -12,9 +10,9 @@ const initialState = {
 };
 
 export default function AddPasswordButton({ email }: { email: string }) {
-  // const [state, submitAction, isPending] = useActionState(sendAddPasswordEmail, initialState);
   const action = sendAddPasswordEmail.bind(null, email as string);
-  const [state, submitAction] = useFormState(action, initialState);
+  const [state, submitAction, isPending] = useActionState(action, initialState);
+
   useEffect(() => {
     if (state.type === 'success') {
       toast.success(state.message);
@@ -26,9 +24,14 @@ export default function AddPasswordButton({ email }: { email: string }) {
   return (
     <>
       <form action={submitAction}>
-        <SubmitButton variant='outline' size='sm'>
-          Add Password
-        </SubmitButton>
+        <Button
+          className='w-full'
+          disabled={isPending}
+          variant='outline'
+          size='sm'
+        >
+          {isPending ? 'Sending...' : 'Send password addition request'}
+        </Button>
       </form>
     </>
   );

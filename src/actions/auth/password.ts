@@ -147,6 +147,10 @@ export async function addPassword(
   if (!validatedFields.success) {
     return {
       type: 'error',
+      data: {
+        password: formData.get('password') as string,
+        password2: formData.get('password2') as string,
+      },
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields!!',
     };
@@ -156,6 +160,10 @@ export async function addPassword(
   if (validatedFields.data.password !== validatedFields.data.password2) {
     return {
       type: 'error',
+      data: {
+        password: validatedFields.data.password,
+        password2: validatedFields.data.password2,
+      },
       errors: {
         password: undefined,
         password2: undefined,
@@ -173,6 +181,10 @@ export async function addPassword(
     if (!user.success) {
       return {
         type: 'error',
+        data: {
+          password: validatedFields.data.password,
+          password2: validatedFields.data.password2,
+        },
         errors: {
           password: undefined,
           password2: undefined,
@@ -186,6 +198,10 @@ export async function addPassword(
 
     return {
       type: 'success',
+      data: {
+        password: '',
+        password2: '',
+      },
       errors: null,
       message: user.message || 'Password added successfully.',
     };
@@ -193,6 +209,10 @@ export async function addPassword(
     console.error('Failed to add password.', error);
     return {
       type: 'error',
+      data: {
+        password: validatedFields.data.password,
+        password2: validatedFields.data.password2,
+      },
       errors: {
         password: undefined,
         password2: undefined,
@@ -250,6 +270,11 @@ export async function changePassword(
   if (!validatedFields.success) {
     return {
       type: 'error',
+      data: {
+        oldPassword: formData.get('oldPassword') as string,
+        password: formData.get('password') as string,
+        password2: formData.get('password2') as string,
+      },
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields!!',
     };
@@ -259,6 +284,11 @@ export async function changePassword(
   if (validatedFields.data.newPassword !== validatedFields.data.password2) {
     return {
       type: 'error',
+      data: {
+        oldPassword: validatedFields.data.oldPassword,
+        newPassword: validatedFields.data.newPassword,
+        password2: validatedFields.data.password2,
+      },
       errors: {
         oldPassword: undefined,
         newPassword: undefined,
@@ -279,6 +309,11 @@ export async function changePassword(
     if (!user.success) {
       return {
         type: 'error',
+        data: {
+          oldPassword: validatedFields.data.oldPassword,
+          newPassword: validatedFields.data.newPassword,
+          password2: validatedFields.data.password2,
+        },
         errors: {
           oldPassword: undefined,
           newPassword: undefined,
@@ -289,6 +324,11 @@ export async function changePassword(
     }
     return {
       type: 'success',
+      data: {
+        oldPassword: '',
+        newPassword: '',
+        password2: '',
+      },
       errors: null,
       message: user.message || 'Password change successfully.',
     };
@@ -296,6 +336,11 @@ export async function changePassword(
     console.error('Failed to change password.', error);
     return {
       type: 'error',
+      data: {
+        oldPassword: validatedFields.data.oldPassword,
+        newPassword: validatedFields.data.newPassword,
+        password2: validatedFields.data.password2,
+      },
       errors: {
         oldPassword: undefined,
         newPassword: undefined,

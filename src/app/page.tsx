@@ -4,7 +4,7 @@ import DotPattern from '@/components/ui/dot-pattern';
 
 export default function Home() {
   return (
-    <main className='flex h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-600 to-gray-400 dark:from-[#2e026d] dark:to-[#15162c]'>
+    <main className='flex h-[calc(100vh-65px)] flex-col items-center justify-center bg-gradient-to-b from-gray-600 to-gray-400 dark:from-[#2e026d] dark:to-[#15162c]'>
       <OrbitingCirclesDemo />
       <DotPattern
         width={40}

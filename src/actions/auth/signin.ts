@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation';
 
 // =============================== signIn ===============================
 const signInSchema = z.object({
-  username: z.string().min(3, { message: 'Must be 3 or more characters long' }),
-  password: z.string().min(8, { message: 'Must be 8 or more characters long' }),
+  username: z.string(),
+  password: z.string(),
 });
 export async function signIn(prevState: any, formData: FormData) {
   const validatedFields = signInSchema.safeParse({
@@ -18,6 +18,10 @@ export async function signIn(prevState: any, formData: FormData) {
   if (!validatedFields.success) {
     return {
       type: 'error',
+      data: {
+        username: formData.get('username') as string,
+        password: formData.get('password') as string,
+      },
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields!!',
     };
@@ -37,6 +41,10 @@ export async function signIn(prevState: any, formData: FormData) {
           username: undefined,
           password: undefined,
         },
+        data: {
+          username: validatedFields.data.username,
+          password: validatedFields.data.password,
+        },
         message: error.message,
       };
     } else if (error.code === 'OauthError') {
@@ -45,6 +53,10 @@ export async function signIn(prevState: any, formData: FormData) {
         errors: {
           username: undefined,
           password: undefined,
+        },
+        data: {
+          username: validatedFields.data.username,
+          password: validatedFields.data.password,
         },
         message: error.message,
       };

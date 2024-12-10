@@ -1,28 +1,33 @@
 'use client';
-// import { useActionState } from 'react';
-import { useState } from 'react';
+
+import { useActionState, useState } from 'react';
 import { signIn } from '@/actions/auth';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
-import { SubmitButton } from '@/components/SubmitButton';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const initialState = {
   type: '',
   message: '',
-  errors: null,
+  data: {
+    username: '',
+    password: '',
+  },
+  errors: {
+    username: undefined,
+    password: undefined,
+  },
 };
 
 export default function SignInForm() {
-  // const [state, submitAction, isPending] = useActionState(signUp, initialState);
   const [showPassword, setShowPassword] = useState(false);
-  const [state, submitAction] = useFormState(signIn, initialState as any);
+  const [state, submitAction, isPending] = useActionState(signIn, initialState);
 
   return (
     <form action={submitAction} className='space-y-6'>
-      {state.errors && (
+      {state.type === 'error' && (
         <div className='rounded-md border-2 border-red-400 px-2 py-4 text-center'>
           <p className='text-red-500'>{state.message}</p>
         </div>
@@ -35,6 +40,7 @@ export default function SignInForm() {
           placeholder='Username'
           required
           type='text'
+          defaultValue={state.data.username}
         />
         {state.errors?.username && (
           <p className='text-sm text-red-500'>{state.errors.username}</p>
@@ -56,6 +62,7 @@ export default function SignInForm() {
             name='password'
             placeholder='••••••••'
             required
+            defaultValue={state.data.password}
             className='form-input block w-full px-3 py-2 placeholder-gray-500 transition duration-150 ease-in-out sm:text-sm sm:leading-5'
             type={showPassword ? 'text' : 'password'}
           />
@@ -74,7 +81,9 @@ export default function SignInForm() {
           <p className='text-red-500'>{state.errors.password}</p>
         )}
       </div>
-      <SubmitButton>Sign In</SubmitButton>
+      <Button className='w-full' disabled={isPending} type='submit'>
+        {isPending ? 'Signing in...' : 'Sign in'}
+      </Button>
     </form>
   );
 }

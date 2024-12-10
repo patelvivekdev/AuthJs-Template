@@ -1,4 +1,3 @@
-// import { useActionState } from 'react';
 import { deleteAccount } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +13,6 @@ import {
 import { SubmitButton } from '@/components/SubmitButton';
 
 export default function DeleteAccount({ userId }: { userId: string }) {
-  // const [state, submitAction, isPending] = useActionState(deleteAccount, initialState);
   const deleteAccountWithEmail = deleteAccount.bind(null, userId as string);
 
   return (
@@ -45,7 +43,9 @@ export default function DeleteAccount({ userId }: { userId: string }) {
             </Button>
           </DialogClose>
           <form action={deleteAccountWithEmail}>
-            <SubmitButton>Delete Account</SubmitButton>
+            <SubmitButton pendingText='Deleting...'>
+              Delete Account
+            </SubmitButton>
           </form>
         </DialogFooter>
       </DialogContent>

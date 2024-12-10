@@ -10,13 +10,12 @@ export const metadata: Metadata = {
   description: 'Reset your password',
 };
 
-export default async function ResetPasswordPage({
-  searchParams,
-}: {
-  searchParams?: {
+export default async function ResetPasswordPage(props: {
+  searchParams?: Promise<{
     token?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const token = searchParams?.token || '';
   if (token === '') {
     return (
