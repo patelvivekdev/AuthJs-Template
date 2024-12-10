@@ -1,5 +1,7 @@
 # AuthJs Template
 
+> Updated to nextjs15 and react19.
+
 A template repo for starting authentication in your upcoming Next.js application. Used Drizzle, Auth.js(Next-Auth), Turso.
 
 ![Image](./public/authjs-template.png)
@@ -12,7 +14,7 @@ A template repo for starting authentication in your upcoming Next.js application
 - How to setup Oauth Login in NextJs.
 - How to Link accounts in NextJs.
 
-All these with Next-auth(AuthJs v5).
+All of these with Next-auth(AuthJs v5) and Nextjs 15 App router
 
 ---
 
@@ -59,7 +61,7 @@ All these with Next-auth(AuthJs v5).
 
 - [x] Role Based Access | Protected
 
-> Here I used my domain to select admin user. After that admin can another admin
+> Here, I used my domain to select the admin user. After that, the admin can add another admin
 
 ## User Management (Admin)
 
@@ -72,7 +74,7 @@ All these with Next-auth(AuthJs v5).
 
 ## Emails
 
-- [ ] Send email for every account change event and store the history.
+- [ ] Send an email for every account change event and store the history.
 
 ## Links
 
