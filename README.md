@@ -79,7 +79,7 @@ All of these with Next-auth(AuthJs v5) and Nextjs 15 App router
 ## Links
 
 - [Live Link JWT Sessions](https://authjs-template.patelvivek.dev)
-- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.devi
+- [Live Link DB Sessions](https://authjs-template-db-sessions.patelvivek.dev)
 
 - [AuthJS](https://authjs.dev)
 - [Drizzle](https://drizzle.team)
