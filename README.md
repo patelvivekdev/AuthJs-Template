@@ -1,5 +1,7 @@
 # AuthJs Template
-
+<div align="center">
+  <a href="https://deepwiki.com/patelvivekdev/AuthJs-Template"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+</div>
 > Updated to nextjs15 and react19.
 
 A template repo for starting authentication in your upcoming Next.js application. Used Drizzle, Auth.js(Next-Auth), Turso.
