@@ -1,4 +1,5 @@
 # AuthJs Template
+
 <div align="center">
   <a href="https://deepwiki.com/patelvivekdev/AuthJs-Template"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </div>
